@@ -6,7 +6,7 @@ import MainPageComponent from "../components/MainPageComponent";
 export default function MainPageScreen({navigation}){
 
   return(
-    <View>
+    <View style={styles.the_View}>
       <StatusBar style="auto" />
       <MainPageComponent navigation={navigation} />
     </View>
@@ -14,5 +14,7 @@ export default function MainPageScreen({navigation}){
 }
 
 const styles = StyleSheet.create({
-
+  the_View:{
+    flex:1
+  },
 })

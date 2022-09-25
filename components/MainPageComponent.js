@@ -6,7 +6,7 @@ import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 export default function MainPageComponent({navigation, route}){
 
   return(
-    <View>
+    <View style={styles.the_View}>
       <StatusBar style="auto" />
       <Text>Main Page Component</Text>
       
@@ -32,6 +32,11 @@ export default function MainPageComponent({navigation, route}){
 }
 
 const styles = StyleSheet.create({
+  the_View:{
+    justifyContent: 'center', //Centered vertically
+    alignItems: 'center', // Centered horizontally
+    flex:1
+  },
   navigation_button:{
     width: 100,
     height: 50,
