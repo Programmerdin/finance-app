@@ -25,7 +25,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
   //set up a function that generates two random numbers for Division questions
   const generateRandomNumberDivision = () => {
     // let tempNumber1 = Math.floor(Math.random() * 900) + 100;
-    let tempNumber1 = 400;
+    let tempNumber1 = 200;
     setRandomNumber1(tempNumber1);
     // create a variable named tempNumber2 that is less than tempNumber1 and greater than 10
     // let tempNumber2 = Math.floor(Math.random() * (tempNumber1 - 10)) + 10;
@@ -112,7 +112,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
     //number of columns required -1 to account for the decimal point
     let columnsNeeded = randomNumber1Length + randomnumber2Length + answerStringInPercent.length - 1;
     //number of rows required
-    let rowsNeeded = answerString.length;
+    let rowsNeeded = 2+ (answerString.length-2)*2
+    console.log("answerString"+answerString)
+    console.log("rowsNeeded:"+rowsNeeded)
 
     //create a 2D array named tempGrid by using 2 for loops
     for (let i = 0; i < rowsNeeded; i++) {
@@ -121,6 +123,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         tempGrid[i][j] = "";
       }
     }
+    console.log(tempGrid);
 
     //fill in the 2D array with the numbers from calculation steps
     //fill in randomNumber 1 from [1,0] to [1,randomNumber1.length-1]
@@ -164,6 +167,11 @@ export default function DivisionQuizComponent({ navigation, route }) {
         let replacer = tempNumberfromCalcStep4Array[i];
         tempGrid[3][randomNumber1Length + randomnumber2Length - i] = replacer;
       }
+    } else{
+      //if the previous if was true
+      if (NumbersFromCalculationStepsArray[2] && NumbersFromCalculationStepsArray[2] != "" && tempGrid[2]){
+        tempGrid[3][randomNumber1Length + randomnumber2Length] = "0"
+      }
     }
 
     //number5 from calcultion steps
@@ -176,7 +184,12 @@ export default function DivisionQuizComponent({ navigation, route }) {
         tempGrid[4][randomNumber1Length + randomnumber2Length + 1 - i] = replacer;
       }
       console.log("number 4: " + NumbersFromCalculationStepsArray[4]);
-    }
+      console.log("tempGrid: " + tempGrid);
+    }else{
+      //if the previous if was true
+      if (NumbersFromCalculationStepsArray[3] && NumbersFromCalculationStepsArray[3] != "" && tempGrid[3]){
+      tempGrid[4][randomNumber1Length + randomnumber2Length + 1] = "0"
+    }}
 
     //number6 from calculation steps
     //fill up the grid from left to right
@@ -188,6 +201,12 @@ export default function DivisionQuizComponent({ navigation, route }) {
         tempGrid[5][randomNumber1Length + randomnumber2Length + 1 - i] = replacer;
       }
       console.log("number 5: " + NumbersFromCalculationStepsArray[5]);
+
+      } else{
+        //if the previous if was true
+        if (NumbersFromCalculationStepsArray[4] && NumbersFromCalculationStepsArray[4] != "" && tempGrid[4]){
+          tempGrid[5][randomNumber1Length + randomnumber2Length + 1] = "0"
+        }
     }
 
     //number7 from calculation steps
@@ -201,7 +220,10 @@ export default function DivisionQuizComponent({ navigation, route }) {
         tempGrid[6][randomNumber1Length + randomnumber2Length + 2 - i] = replacer;
       }
       console.log("number 6: " + NumbersFromCalculationStepsArray[6]);
-    }
+    }else{
+      if (NumbersFromCalculationStepsArray[5] && NumbersFromCalculationStepsArray[5] != "" && tempGrid[5]){
+      tempGrid[6][randomNumber1Length + randomnumber2Length + 2] = "0"
+    }}
 
     //number8 from calculation steps
     //fill up the grid from left to right
@@ -215,7 +237,10 @@ export default function DivisionQuizComponent({ navigation, route }) {
       }
 
       console.log("number 7: " + NumbersFromCalculationStepsArray[7]);
-    }
+    }else{
+      if (NumbersFromCalculationStepsArray[6] && NumbersFromCalculationStepsArray[6] != "" && tempGrid[6]){
+      tempGrid[7][randomNumber1Length + randomnumber2Length + 2] = "0"
+    }}
 
     //number9 from calculation steps
     //fill up the grid from left to right
@@ -227,7 +252,10 @@ export default function DivisionQuizComponent({ navigation, route }) {
         tempGrid[8][randomNumber1Length + randomnumber2Length + 3 - i] = replacer;
       }
       console.log("number 8: " + NumbersFromCalculationStepsArray[8]);
-    }
+    }else{
+      if (NumbersFromCalculationStepsArray[7] && NumbersFromCalculationStepsArray[7] != "" && tempGrid[7]){
+      tempGrid[8][randomNumber1Length + randomnumber2Length + 3] = "0"
+    }}
 
     //number10 from calculation steps
     //fill up the grid from left to right
@@ -239,7 +267,10 @@ export default function DivisionQuizComponent({ navigation, route }) {
         tempGrid[9][randomNumber1Length + randomnumber2Length + 3 - i] = replacer;
       }
       console.log("number 9: " + NumbersFromCalculationStepsArray[9]);
-    }
+    }else{
+      if (NumbersFromCalculationStepsArray[8] && NumbersFromCalculationStepsArray[8] != "" && tempGrid[8]){
+      tempGrid[9][randomNumber1Length + randomnumber2Length + 3] = "0"
+    }}
 
 
     //number11 from calculation steps
@@ -252,7 +283,10 @@ export default function DivisionQuizComponent({ navigation, route }) {
         tempGrid[10][randomNumber1Length + randomnumber2Length + 4 - i] = replacer;
       }
     console.log("number 10: " + NumbersFromCalculationStepsArray[10]);
-    }
+    }else{
+      if (NumbersFromCalculationStepsArray[9] && NumbersFromCalculationStepsArray[9] != "" && tempGrid[9]){
+      tempGrid[10][randomNumber1Length + randomnumber2Length + 4] = "0"
+    }}
 
     //number12 from calculation steps
     //fill up the grid from left to right
@@ -264,7 +298,11 @@ export default function DivisionQuizComponent({ navigation, route }) {
         tempGrid[11][randomNumber1Length + randomnumber2Length + 4 - i] = replacer;
       }
     console.log("number 11: " + NumbersFromCalculationStepsArray[11]);
-    }
+    }else{
+      if (NumbersFromCalculationStepsArray[10] && NumbersFromCalculationStepsArray[10] != "" && tempGrid[10]){
+
+      tempGrid[11][randomNumber1Length + randomnumber2Length + 4] = "0"
+    }}
   };
 
   //figure out how to display the grid that is now filled with numbers
