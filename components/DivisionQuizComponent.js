@@ -132,6 +132,15 @@ export default function DivisionQuizComponent({ navigation, route }) {
     }
     console.log("tempGrid ",tempGrid);
 
+    //fill in the answerString on the top
+    //remove decimal point from answerString
+    let tempAnswerStringArray = answerString.filter((number) => number != ".");
+    //replace empty grid cells with the decimal answer
+    for (let i = 0; i < tempAnswerStringArray.length && i < 11 - randomNumber1Length - randomnumber2Length + 1; i++) {
+      let replacer = tempAnswerStringArray[i];
+      tempGrid[0][randomNumber1Length + randomnumber2Length + i - 1] = replacer;
+    }
+
     //fill in the 2D array with the numbers from calculation steps
     //fill in randomNumber 1 from [1,0] to [1,randomNumber1.length-1]
     for (let i = 0; i < randomNumber1Length; i++) {
@@ -145,189 +154,29 @@ export default function DivisionQuizComponent({ navigation, route }) {
       tempGrid[1][randomNumber1Length + i] = replacer;
     }
 
-    //fill in the answerString on the top
-    //remove decimal point from answerString
-    let tempAnswerStringArray = answerString.filter((number) => number != ".");
-    //replace empty grid cells with the decimal answer
-    for (let i = 0; i < tempAnswerStringArray.length && i < 11 - randomNumber1Length - randomnumber2Length + 1; i++) {
-      let replacer = tempAnswerStringArray[i];
-      tempGrid[0][randomNumber1Length + randomnumber2Length + i - 1] = replacer;
-    }
 
-    //number3 from calculation steps
-    //fill up the grid from left to right
-    //if NumbersFromCalculationStepsArray[2] is empty then do nothing
-    if (NumbersFromCalculationStepsArray[2] && NumbersFromCalculationStepsArray[2] != "" && tempGrid[2]) {
-      let tempNumberfromCalcStep3Array = NumbersFromCalculationStepsArray[2].toString().split("").reverse();
-      for (let i = 0; i < tempNumberfromCalcStep3Array.length; i++) {
-        let replacer = tempNumberfromCalcStep3Array[i];
-        tempGrid[2][randomNumber1Length + randomnumber2Length - i] = replacer;
+    //to place number[i] from calculation steps
+    //loop to the length of tempGrid which is the number of Rows created 
+    //i starts at 2 beacuse the first 2 rows of tempGrid is already taken by answerString and randomNumber1&2
+    for(let i=2; i < tempGrid.length; i++){
+      //break down the number into string and each individual number into array and reverse the order of array
+      //we reverse because we write from right of the grid to left 
+      let replacer = NumbersFromCalculationStepsArray[i].toString().split("").reverse() 
+
+      //run the loop for the length of the number[i] of the calculation step 
+      for(let j=0; j<replacer.length; j++) {
+        //i[2&3] need +0spaces, i[4&5] need +1spaces, i[6&7] need +2spaces, spaces meaning left indent spaces
+        //math.floor to round down (i/2) to whole number
+        //(i/2)-1 to get the correct number of spaces needed
+
+        //if randomNumber3 is 3 digits then needs 6 spaces then can write from right to left 
+        //if randomNumber2 is 2 digits then needs 5 spaces then can write from right to left
+        //above two statements represented by randomNumber2Length+3
+
+        //subtract j because we writing from right to left 
+        tempGrid[i][randomnumber2Length+3+(Math.floor(i/2)-1)-j] = replacer[j]
       }
     }
-
-    //number4 from calcultion steps
-    //fill up the grid from left to right
-    //if NumbersFromCalculationStepsArray[3] is empty then do nothing
-    if (NumbersFromCalculationStepsArray[3] && NumbersFromCalculationStepsArray[3] != "" && tempGrid[3]) {
-      let tempNumberfromCalcStep4Array = NumbersFromCalculationStepsArray[3].toString().split("").reverse();
-      for (let i = 0; i < tempNumberfromCalcStep4Array.length; i++) {
-        let replacer = tempNumberfromCalcStep4Array[i];
-        tempGrid[3][randomNumber1Length + randomnumber2Length - i] = replacer;
-      }
-    } else{
-      //if the previous if was true
-      if (NumbersFromCalculationStepsArray[2] && NumbersFromCalculationStepsArray[2] != "" && tempGrid[2]){
-        tempGrid[3][randomNumber1Length + randomnumber2Length] = "0"
-      }
-    }
-
-    //number5 from calcultion steps
-    //fill up the grid from left to right
-    //if NumbersFromCalculationStepsArray[4] is empty then do nothing
-    if (NumbersFromCalculationStepsArray[4] && NumbersFromCalculationStepsArray[4] != "" && tempGrid[4]) {
-      let tempNumberfromCalcStep5Array = NumbersFromCalculationStepsArray[4].toString().split("").reverse();  
-      for (let i = 0; i < tempNumberfromCalcStep5Array.length; i++) {
-        let replacer = tempNumberfromCalcStep5Array[i];
-        tempGrid[4][randomNumber1Length + randomnumber2Length + 1 - i] = replacer;
-      }
-    }else{
-      //if the previous if was true
-      if (NumbersFromCalculationStepsArray[3] && NumbersFromCalculationStepsArray[3] != "" && tempGrid[3]){
-      tempGrid[4][randomNumber1Length + randomnumber2Length + 1] = "0"
-    }}
-
-    //number6 from calculation steps
-    //fill up the grid from left to right
-    //if NumbersFromCalculationStepsArray[5] is empty then do nothing
-    if (NumbersFromCalculationStepsArray[5] && NumbersFromCalculationStepsArray[5] != "" && tempGrid[5]) {
-      let tempNumberfromCalcStep6Array = NumbersFromCalculationStepsArray[5].toString().split("").reverse();
-      for (let i = 0; i < tempNumberfromCalcStep6Array.length; i++) {
-        let replacer = tempNumberfromCalcStep6Array[i];
-        tempGrid[5][randomNumber1Length + randomnumber2Length + 1 - i] = replacer;
-      }
-
-      } else{
-        //if the previous if was true
-        if (NumbersFromCalculationStepsArray[4] && NumbersFromCalculationStepsArray[4] != "" && tempGrid[4]){
-          tempGrid[5][randomNumber1Length + randomnumber2Length + 1] = "0"
-        }
-    }
-
-    //number7 from calculation steps
-    //fill up the grid from left to right
-    //if NumbersFromCalculationStepsArray[6] is empty then do nothing
-    if (NumbersFromCalculationStepsArray[6] && NumbersFromCalculationStepsArray[6] != "" && tempGrid[6]) {
-      let tempNumberfromCalcStep7Array = NumbersFromCalculationStepsArray[6].toString().split("").reverse();
-
-      for (let i = 0; i < tempNumberfromCalcStep7Array.length; i++) {
-        let replacer = tempNumberfromCalcStep7Array[i];
-        tempGrid[6][randomNumber1Length + randomnumber2Length + 2 - i] = replacer;
-      }
-    }else{
-      if (NumbersFromCalculationStepsArray[5] && NumbersFromCalculationStepsArray[5] != "" && tempGrid[5]){
-      tempGrid[6][randomNumber1Length + randomnumber2Length + 2] = "0"
-    }}
-
-    //number8 from calculation steps
-    //fill up the grid from left to right
-    //if NumbersFromCalculationStepsArray[7] is empty then do nothing
-    if (NumbersFromCalculationStepsArray[7] && NumbersFromCalculationStepsArray[7] != "" && tempGrid[7]) {
-      let tempNumberfromCalcStep8Array = NumbersFromCalculationStepsArray[7].toString().split("").reverse();
-
-      for (let i = 0; i < tempNumberfromCalcStep8Array.length; i++) {
-        let replacer = tempNumberfromCalcStep8Array[i];
-        tempGrid[7][randomNumber1Length + randomnumber2Length + 2 - i] = replacer;
-      }
-    }else{
-      if (NumbersFromCalculationStepsArray[6] && NumbersFromCalculationStepsArray[6] != "" && tempGrid[6]){
-      tempGrid[7][randomNumber1Length + randomnumber2Length + 2] = "0"
-    }}
-
-    //number9 from calculation steps
-    //fill up the grid from left to right
-    //if NumbersFromCalculationStepsArray[8] is empty then do nothing
-    if (NumbersFromCalculationStepsArray[8] && NumbersFromCalculationStepsArray[8] != "" && tempGrid[8]) {
-      let tempNumberfromCalcStep9Array = NumbersFromCalculationStepsArray[8].toString().split("").reverse();
-      for (let i = 0; i < tempNumberfromCalcStep9Array.length; i++) {
-        let replacer = tempNumberfromCalcStep9Array[i];
-        tempGrid[8][randomNumber1Length + randomnumber2Length + 3 - i] = replacer;
-      }
-    }else{
-      if (NumbersFromCalculationStepsArray[7] && NumbersFromCalculationStepsArray[7] != "" && tempGrid[7]){
-      tempGrid[8][randomNumber1Length + randomnumber2Length + 3] = "0"
-    }}
-
-    //number10 from calculation steps
-    //fill up the grid from left to right
-    //if NumbersFromCalculationStepsArray[9] is empty then do nothing
-    if (NumbersFromCalculationStepsArray[9] && NumbersFromCalculationStepsArray[9] != "" && tempGrid[9]) {
-      let tempNumberfromCalcStep10Array = NumbersFromCalculationStepsArray[9].toString().split("").reverse();
-      for (let i = 0; i < tempNumberfromCalcStep10Array.length; i++) {
-        let replacer = tempNumberfromCalcStep10Array[i];
-        tempGrid[9][randomNumber1Length + randomnumber2Length + 3 - i] = replacer;
-      }
-    }else{
-      if (NumbersFromCalculationStepsArray[8] && NumbersFromCalculationStepsArray[8] != "" && tempGrid[8]){
-      tempGrid[9][randomNumber1Length + randomnumber2Length + 3] = "0"
-    }}
-
-
-    //number11 from calculation steps
-    //fill up the grid from left to right
-    //if NumbersFromCalculationStepsArray[10] is empty then do nothing
-    if (NumbersFromCalculationStepsArray[10] && NumbersFromCalculationStepsArray[10] != "" && tempGrid[10]) {
-      let tempNumberfromCalcStep11Array = NumbersFromCalculationStepsArray[10].toString().split("").reverse();
-      for (let i = 0; i < tempNumberfromCalcStep11Array.length; i++) {
-        let replacer = tempNumberfromCalcStep11Array[i];
-        tempGrid[10][randomNumber1Length + randomnumber2Length + 4 - i] = replacer;
-      }
-    }else{
-      if (NumbersFromCalculationStepsArray[9] && NumbersFromCalculationStepsArray[9] != "" && tempGrid[9]){
-      tempGrid[10][randomNumber1Length + randomnumber2Length + 4] = "0"
-    }}
-
-    //number12 from calculation steps
-    //fill up the grid from left to right
-    //if NumbersFromCalculationStepsArray[11] is empty then do nothing
-    if (NumbersFromCalculationStepsArray[11] && NumbersFromCalculationStepsArray[11] != "" && tempGrid[11]) {
-      let tempNumberfromCalcStep12Array = NumbersFromCalculationStepsArray[11].toString().split("").reverse();
-      for (let i = 0; i < tempNumberfromCalcStep12Array.length; i++) {
-        let replacer = tempNumberfromCalcStep12Array[i];
-        tempGrid[11][randomNumber1Length + randomnumber2Length + 4 - i] = replacer;
-      }
-    }else{
-      if (NumbersFromCalculationStepsArray[10] && NumbersFromCalculationStepsArray[10] != "" && tempGrid[10]){
-      tempGrid[11][randomNumber1Length + randomnumber2Length + 4] = "0"
-    }}
-
-    //number13 from calculation steps
-    //fill up the grid from left to right
-    //if NumbersFromCalculationStepsArray[12] is empty then do nothing
-    if (NumbersFromCalculationStepsArray[12] && NumbersFromCalculationStepsArray[12] != "" && tempGrid[12]) {
-      let tempNumberfromCalcStep13Array = NumbersFromCalculationStepsArray[12].toString().split("").reverse();
-      for (let i = 0; i < tempNumberfromCalcStep13Array.length; i++) {
-        let replacer = tempNumberfromCalcStep13Array[i];
-        tempGrid[12][randomNumber1Length + randomnumber2Length + 5 - i] = replacer;
-      }
-    }
-    else{
-      if (NumbersFromCalculationStepsArray[11] && NumbersFromCalculationStepsArray[11] != "" && tempGrid[11]){
-      tempGrid[12][randomNumber1Length + randomnumber2Length + 5] = "0"
-    }}
-
-    //number14 from calculation steps
-    //fill up the grid from left to right
-    //if NumbersFromCalculationStepsArray[13] is empty then do nothing
-    if (NumbersFromCalculationStepsArray[13] && NumbersFromCalculationStepsArray[13] != "" && tempGrid[13]) {
-      let tempNumberfromCalcStep14Array = NumbersFromCalculationStepsArray[13].toString().split("").reverse();
-      for (let i = 0; i < tempNumberfromCalcStep14Array.length; i++) {
-        let replacer = tempNumberfromCalcStep14Array[i];
-        tempGrid[13][randomNumber1Length + randomnumber2Length + 5 - i] = replacer;
-      }
-    }else{
-      if (NumbersFromCalculationStepsArray[12] && NumbersFromCalculationStepsArray[12] != "" && tempGrid[12]){
-      tempGrid[13][randomNumber1Length + randomnumber2Length + 5] = "0"
-    }}
   };
 
   //figure out how to display the grid that is now filled with numbers
