@@ -56,23 +56,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
     let tempNumber4 = tempNumber2 * 10 - tempNumber3;
     temp_numbers_from_calculation_steps_Array.push(tempNumber4);
 
-    // //get rest of the numbers from calculation steps
-    // for (let i = 3; i < 20; i++) {
-    //   //Only get the next number from calculation steps if the last number from the calculation step is not 0
-    //   if (temp_numbers_from_calculation_steps_Array[temp_numbers_from_calculation_steps_Array.length - 1]) {
-    //     let tempNumber5 = parseInt(tempAnswer2Array[i], 10) * tempNumber1;
-    //     temp_numbers_from_calculation_steps_Array.push(tempNumber5);
-
-    //     //Only get the next number from calculation steps if the last number from the calculation step is not 0
-    //     if (temp_numbers_from_calculation_steps_Array[temp_numbers_from_calculation_steps_Array.length - 1] != 0) {
-    //       let tempNumber6 =
-    //         temp_numbers_from_calculation_steps_Array[temp_numbers_from_calculation_steps_Array.length - 2] * 10 -
-    //         tempNumber5;
-    //       temp_numbers_from_calculation_steps_Array.push(tempNumber6);
-    //     }
-    //   }
-    // }
-
     //get rest of the numbers from calculation steps
     for (let i = 3; i < 20; i++) {
       //check if the i th digit of the decimal answer actually exists
@@ -98,8 +81,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
   //set up a function that generates a grid
   const generateGrid = () => {
-    console.log("Numbers From Calculation Steps Array" + NumbersFromCalculationStepsArray);
-
     //setting up useful variable to use within this function
     let randomNumber1Length = randomNumber1.toString().length;
     let randomnumber2Length = randomNumber2.toString().length;
@@ -109,19 +90,17 @@ export default function DivisionQuizComponent({ navigation, route }) {
     //figure out how many rows and columns are needed
     //number of columns required -1 to account for the decimal point
     let columnsNeeded = randomNumber1Length + randomnumber2Length + answerStringInPercent.length - 1;
-    
     //number of rows required
     //set it as 0 first so that the variable exists
-    let rowsNeeded = 0
+    let rowsNeeded = 0;
     //check if randomNumber1Length + randomNumberLength2 is 6
-    if((randomNumber1Length+randomnumber2Length)==6){
+    if (randomNumber1Length + randomnumber2Length == 6) {
       //then limit the number of rows to 12 at most
-      rowsNeeded = Math.min(2+ (answerString.length-2)*2, 12)
+      rowsNeeded = Math.min(2 + (answerString.length - 2) * 2, 12);
     } else {
       //if randomNumber1Length + randomNumberLength2 is not 6, then limit the number of rows to 14 at most
-      rowsNeeded = Math.min(2+ (answerString.length-2)*2, 14)
+      rowsNeeded = Math.min(2 + (answerString.length - 2) * 2, 14);
     }
-
 
     //create a 2D array named tempGrid by using 2 for loops
     for (let i = 0; i < rowsNeeded; i++) {
@@ -130,8 +109,8 @@ export default function DivisionQuizComponent({ navigation, route }) {
         tempGrid[i][j] = "";
       }
     }
-    console.log("tempGrid ",tempGrid);
 
+    //fill in the 2D array with the numbers from calculation steps
     //fill in the answerString on the top
     //remove decimal point from answerString
     let tempAnswerStringArray = answerString.filter((number) => number != ".");
@@ -141,7 +120,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
       tempGrid[0][randomNumber1Length + randomnumber2Length + i - 1] = replacer;
     }
 
-    //fill in the 2D array with the numbers from calculation steps
     //fill in randomNumber 1 from [1,0] to [1,randomNumber1.length-1]
     for (let i = 0; i < randomNumber1Length; i++) {
       let replacer = randomNumber1Array[i];
@@ -154,27 +132,26 @@ export default function DivisionQuizComponent({ navigation, route }) {
       tempGrid[1][randomNumber1Length + i] = replacer;
     }
 
-
     //to place number[i] from calculation steps
-    //loop to the length of tempGrid which is the number of Rows created 
+    //loop to the length of tempGrid which is the number of Rows created
     //i starts at 2 beacuse the first 2 rows of tempGrid is already taken by answerString and randomNumber1&2
-    for(let i=2; i < tempGrid.length; i++){
+    for (let i = 2; i < tempGrid.length; i++) {
       //break down the number into string and each individual number into array and reverse the order of array
-      //we reverse because we write from right of the grid to left 
-      let replacer = NumbersFromCalculationStepsArray[i].toString().split("").reverse() 
+      //we reverse because we write from right of the grid to left
+      let replacer = NumbersFromCalculationStepsArray[i].toString().split("").reverse();
 
-      //run the loop for the length of the number[i] of the calculation step 
-      for(let j=0; j<replacer.length; j++) {
+      //run the loop for the length of the number[i] of the calculation step
+      for (let j = 0; j < replacer.length; j++) {
         //i[2&3] need +0spaces, i[4&5] need +1spaces, i[6&7] need +2spaces, spaces meaning left indent spaces
         //math.floor to round down (i/2) to whole number
         //(i/2)-1 to get the correct number of spaces needed
 
-        //if randomNumber3 is 3 digits then needs 6 spaces then can write from right to left 
+        //if randomNumber3 is 3 digits then needs 6 spaces then can write from right to left
         //if randomNumber2 is 2 digits then needs 5 spaces then can write from right to left
         //above two statements represented by randomNumber2Length+3
 
-        //subtract j because we writing from right to left 
-        tempGrid[i][randomnumber2Length+3+(Math.floor(i/2)-1)-j] = replacer[j]
+        //subtract j because we writing from right to left
+        tempGrid[i][randomnumber2Length + 3 + (Math.floor(i / 2) - 1) - j] = replacer[j];
       }
     }
   };
@@ -231,8 +208,8 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
           //run the grid function to put the calculation steps numbers into a grid
           generateGrid();
-          displayGrid();
           //renders the tempgrid 2d array in a 2d manner
+          displayGrid();
 
           //if tempUserInputString is empty then alert field is empty
           if (tempUserInputString.length == 0) {
@@ -403,7 +380,7 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 32,
   },
-  randomNumber_text:{
+  randomNumber_text: {
     color: "black",
     fontSize: 32,
   },
