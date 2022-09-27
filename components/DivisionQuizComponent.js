@@ -161,69 +161,200 @@ export default function DivisionQuizComponent({ navigation, route }) {
   //function that displays the grid
   const displayGrid = () => {
     let finalTempArray = [];
+    let view_style_width = 12;
+    let view_style_height = 17;
+    let view_style_borderBottomColor = "black";
+    let view_style_borderBottomWidth = 1;
+    let view_style_alignItems = "center";
+    let view_style_jusifyContent = "center";
+
+    let view_style_combined = {
+      width: view_style_width,
+      height: view_style_height,
+      borderBottomColor: view_style_borderBottomColor,
+      borderBottomWidth: view_style_borderBottomWidth,
+      alignItems: view_style_alignItems,
+      justifyContent: view_style_jusifyContent,
+    };
+
+    let text_style_combined = { textAlign: "center" };
 
     for (let i = 0; i < tempGrid.length; i++) {
       let veryTempArray = [];
       for (let j = 0; j < tempGrid[i].length; j++) {
-        //add bottom border to answer cells and cells before answer cells that are above randomNumber2
-        if(i==0 && j>randomNumber1.toString().length-1){
+        //color each number of answerString
+        //first relevant number of answerString is colored purple
+        if (i == 0 && j == randomNumber1.toString().length + randomNumber2.toString().length && tempGrid[i][j]) {
           veryTempArray.push(
-            <View style={{ width: 12, height: 15,borderBottomColor: 'black',borderBottomWidth: 1 }}>
-              <Text style={{color: "#000000"}}>{tempGrid[i][j]}</Text>
+            <View style={view_style_combined}>
+              <Text style={{ color: "#b30086", textAlign: "center" }}>{tempGrid[i][j]}</Text>
             </View>
           );
-        //add a right border on the very right grid of randomNumber1
-        } else if(i==1 && j==2){
+          //second relevant number of answerString is colored blue
+        } else if (
+          i == 0 &&
+          j == randomNumber1.toString().length + randomNumber2.toString().length + 1 &&
+          tempGrid[i][j]
+        ) {
           veryTempArray.push(
-            <View style={{ width: 12, height: 15,borderRightColor: 'black',borderRightWidth: 1 }}>
-              <Text style={{color: "#000000"}}>{tempGrid[i][j]}</Text>
+            <View style={view_style_combined}>
+              <Text style={{ color: "#2e2eb8", textAlign: "center" }}>{tempGrid[i][j]}</Text>
             </View>
           );
-        } else if(i==2 && j>2 && (tempGrid[i-1][j] || tempGrid[i][j])){
+          //third relevant number of answerString is colored orange
+        } else if (
+          i == 0 &&
+          j == randomNumber1.toString().length + randomNumber2.toString().length + 2 &&
+          tempGrid[i][j]
+        ) {
           veryTempArray.push(
-            <View style={{ width: 12, height: 15,borderBottomColor: 'black',borderBottomWidth: 1 }}>
-              <Text style={{color: "#b30086"}}>{tempGrid[i][j]}</Text>
+            <View style={view_style_combined}>
+              <Text style={{ color: "#e65c00", textAlign: "center" }}>{tempGrid[i][j]}</Text>
             </View>
           );
-        } else if(i==4 && (tempGrid[i-1][j] || tempGrid[i][j])){
+          //fourth relevant number of answerString is colored green
+        } else if (
+          i == 0 &&
+          j == randomNumber1.toString().length + randomNumber2.toString().length + 3 &&
+          tempGrid[i][j]
+        ) {
           veryTempArray.push(
-            <View style={{ width: 12, height: 15 ,borderBottomColor: 'black',borderBottomWidth: 1}}>
-              <Text style={{color: "#2e2eb8"}}>{tempGrid[i][j]}</Text>
+            <View style={view_style_combined}>
+              <Text style={{ color: "#00802b", textAlign: "center" }}>{tempGrid[i][j]}</Text>
             </View>
           );
-        }else if(i==6 && (tempGrid[i-1][j] || tempGrid[i][j])){
+          //fifth relevant number of answerString is colored brown
+        } else if (
+          i == 0 &&
+          j == randomNumber1.toString().length + randomNumber2.toString().length + 4 &&
+          tempGrid[i][j]
+        ) {
           veryTempArray.push(
-            <View style={{ width: 12, height: 15 ,borderBottomColor: 'black',borderBottomWidth: 1}}>
-              <Text style={{color: "#e65c00"}}>{tempGrid[i][j]}</Text>
+            <View style={view_style_combined}>
+              <Text style={{ color: "#990000", textAlign: "center" }}>{tempGrid[i][j]}</Text>
             </View>
           );
-        }else if(i==8 && (tempGrid[i-1][j] || tempGrid[i][j])){
+          //sixth relevant number of answerString is colored lime
+        } else if (
+          i == 0 &&
+          j == randomNumber1.toString().length + randomNumber2.toString().length + 5 &&
+          tempGrid[i][j]
+        ) {
           veryTempArray.push(
-            <View style={{ width: 12, height: 15,borderBottomColor: 'black',borderBottomWidth: 1 }}>
-              <Text style={{color: "#00802b"}}>{tempGrid[i][j]}</Text>
+            <View style={view_style_combined}>
+              <Text style={{ color: "#cccc00", textAlign: "center" }}>{tempGrid[i][j]}</Text>
             </View>
           );
-        }else if(i==10 && (tempGrid[i-1][j] || tempGrid[i][j])){
+
+          //add bottom border to answer cells and cells before answer cells that are above randomNumber2
+        } else if (i == 0 && j > randomNumber1.toString().length - 1) {
           veryTempArray.push(
-            <View style={{ width: 12, height: 15 ,borderBottomColor: 'black',borderBottomWidth: 1}}>
-              <Text style={{color: "#990000"}}>{tempGrid[i][j]}</Text>
+            <View style={view_style_combined}>
+              <Text style={{ color: "#000000", textAlign: "center" }}>{tempGrid[i][j]}</Text>
             </View>
           );
-        }else if(i==12 && (tempGrid[i-1][j] || tempGrid[i][j])){
+          //add a right border on the very right grid of randomNumber1
+        } else if (i == 1 && j == 2) {
           veryTempArray.push(
-            <View style={{ width: 12, height: 15 ,borderBottomColor: 'black',borderBottomWidth: 1}}>
-              <Text style={{color: "#cccc00"}}>{tempGrid[i][j]}</Text>
+            <View
+              style={{
+                width: view_style_width,
+                height: view_style_height,
+                borderRightColor: "black",
+                borderRightWidth: 1,
+                alignItems: view_style_alignItems,
+                justifyContent: view_style_jusifyContent,
+              }}
+            >
+              <Text style={{ color: "#000000", textAlign: "center" }}>{tempGrid[i][j]}</Text>
             </View>
           );
-        } else{
+        } else if (i == 2 && j > 2 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
           veryTempArray.push(
-            <View style={{ width: 12, height: 15 }}>
-              <Text>{tempGrid[i][j]}</Text>
+            <View style={view_style_combined}>
+              <Text style={{ color: "#b30086", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        } else if (i == 4 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
+          veryTempArray.push(
+            <View
+              style={{
+                width: view_style_width,
+                height: view_style_height,
+                borderBottomColor: view_style_borderBottomColor,
+                borderBottomWidth: view_style_borderBottomWidth,
+                alignItems: view_style_alignItems,
+                justifyContent: view_style_jusifyContent,
+              }}
+            >
+              <Text style={{ color: "#2e2eb8", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        } else if (i == 6 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
+          veryTempArray.push(
+            <View
+              style={{
+                width: view_style_width,
+                height: view_style_height,
+                borderBottomColor: view_style_borderBottomColor,
+                borderBottomWidth: view_style_borderBottomWidth,
+                alignItems: view_style_alignItems,
+                justifyContent: view_style_jusifyContent,
+              }}
+            >
+              <Text style={{ color: "#e65c00", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        } else if (i == 8 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
+          veryTempArray.push(
+            <View style={view_style_combined}>
+              <Text style={{ color: "#00802b", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        } else if (i == 10 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
+          veryTempArray.push(
+            <View
+              style={{
+                width: view_style_width,
+                height: view_style_height,
+                borderBottomColor: view_style_borderBottomColor,
+                borderBottomWidth: view_style_borderBottomWidth,
+                alignItems: view_style_alignItems,
+                justifyContent: view_style_jusifyContent,
+              }}
+            >
+              <Text style={{ color: "#990000", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        } else if (i == 12 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
+          veryTempArray.push(
+            <View
+              style={{
+                width: view_style_width,
+                height: view_style_height,
+                borderBottomColor: view_style_borderBottomColor,
+                borderBottomWidth: view_style_borderBottomWidth,
+                alignItems: view_style_alignItems,
+                justifyContent: view_style_jusifyContent,
+              }}
+            >
+              <Text style={{ color: "#cccc00", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        } else {
+          veryTempArray.push(
+            <View
+              style={{
+                width: view_style_width,
+                height: view_style_height,
+                alignItems: view_style_alignItems,
+                justifyContent: view_style_jusifyContent,
+              }}
+            >
+              <Text style={{ textAlign: "center" }}>{tempGrid[i][j]}</Text>
             </View>
           );
         }
-
-
       }
       finalTempArray.push(<View style={{ flexDirection: "row" }}>{veryTempArray}</View>);
     }
@@ -242,7 +373,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
     <View style={styles.container}>
       {/* display last 10 items of scoreArray */}
       <Text style={styles.score_text}>Score:{scoreArray.slice(-10)}</Text>
-      <Text style={styles.randomNumber_text}>{randomNumber2} / {randomNumber1} = ?</Text>
+      <Text style={styles.randomNumber_text}>
+        {randomNumber2} / {randomNumber1} = ?
+      </Text>
 
       {/* input field synced with userInput */}
       <TextInput
