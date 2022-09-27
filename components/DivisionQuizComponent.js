@@ -165,11 +165,65 @@ export default function DivisionQuizComponent({ navigation, route }) {
     for (let i = 0; i < tempGrid.length; i++) {
       let veryTempArray = [];
       for (let j = 0; j < tempGrid[i].length; j++) {
-        veryTempArray.push(
-          <View style={{ width: 12, height: 15 }}>
-            <Text>{tempGrid[i][j]}</Text>
-          </View>
-        );
+        //add bottom border to answer cells and cells before answer cells that are above randomNumber2
+        if(i==0 && j>randomNumber1.toString().length-1){
+          veryTempArray.push(
+            <View style={{ width: 12, height: 15,borderBottomColor: 'black',borderBottomWidth: 1 }}>
+              <Text style={{color: "#000000"}}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        //add a right border on the very right grid of randomNumber1
+        } else if(i==1 && j==2){
+          veryTempArray.push(
+            <View style={{ width: 12, height: 15,borderRightColor: 'black',borderRightWidth: 1 }}>
+              <Text style={{color: "#000000"}}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        } else if(i==2 && j>2 && (tempGrid[i-1][j] || tempGrid[i][j])){
+          veryTempArray.push(
+            <View style={{ width: 12, height: 15,borderBottomColor: 'black',borderBottomWidth: 1 }}>
+              <Text style={{color: "#b30086"}}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        } else if(i==4 && (tempGrid[i-1][j] || tempGrid[i][j])){
+          veryTempArray.push(
+            <View style={{ width: 12, height: 15 ,borderBottomColor: 'black',borderBottomWidth: 1}}>
+              <Text style={{color: "#2e2eb8"}}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        }else if(i==6 && (tempGrid[i-1][j] || tempGrid[i][j])){
+          veryTempArray.push(
+            <View style={{ width: 12, height: 15 ,borderBottomColor: 'black',borderBottomWidth: 1}}>
+              <Text style={{color: "#e65c00"}}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        }else if(i==8 && (tempGrid[i-1][j] || tempGrid[i][j])){
+          veryTempArray.push(
+            <View style={{ width: 12, height: 15,borderBottomColor: 'black',borderBottomWidth: 1 }}>
+              <Text style={{color: "#00802b"}}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        }else if(i==10 && (tempGrid[i-1][j] || tempGrid[i][j])){
+          veryTempArray.push(
+            <View style={{ width: 12, height: 15 ,borderBottomColor: 'black',borderBottomWidth: 1}}>
+              <Text style={{color: "#990000"}}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        }else if(i==12 && (tempGrid[i-1][j] || tempGrid[i][j])){
+          veryTempArray.push(
+            <View style={{ width: 12, height: 15 ,borderBottomColor: 'black',borderBottomWidth: 1}}>
+              <Text style={{color: "#cccc00"}}>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        } else{
+          veryTempArray.push(
+            <View style={{ width: 12, height: 15 }}>
+              <Text>{tempGrid[i][j]}</Text>
+            </View>
+          );
+        }
+
+
       }
       finalTempArray.push(<View style={{ flexDirection: "row" }}>{veryTempArray}</View>);
     }
@@ -188,8 +242,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
     <View style={styles.container}>
       {/* display last 10 items of scoreArray */}
       <Text style={styles.score_text}>Score:{scoreArray.slice(-10)}</Text>
-      <Text style={styles.randomNumber_text}>Number 1: {randomNumber1}</Text>
-      <Text style={styles.randomNumber_text}>Number 2: {randomNumber2}</Text>
+      <Text style={styles.randomNumber_text}>{randomNumber2} / {randomNumber1} = ?</Text>
 
       {/* input field synced with userInput */}
       <TextInput
