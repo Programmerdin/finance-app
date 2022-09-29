@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Alert, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
 import { TextInput, FlatList } from "react-native";
@@ -14,6 +14,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
   const [userInputString, setUserInputString] = useState();
   const [answerWhereRelevantDigitHappens, setanswerWhereRelevantDigitHappens] = useState();
   const [scoreArray, setScoreArray] = useState([]);
+  const [scoreArrayImage, setScoreArrayImage] = useState([]);
   const [modalCorrectAnsVisible, setModalCorrectAnsVisible] = useState(false);
   const [modalIncorrectAnsVisible, setModalIncorrectAnsVisible] = useState(false);
   const [TryCount, setTryCount] = useState(0);
@@ -364,6 +365,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
     setTempArray(finalTempArray);
     return finalTempArray;
   };
+  
 
   //functions to run as soon as the app loads up
   useEffect(() => {
@@ -373,13 +375,16 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      {/* display last 10 items of scoreArray */}
-      <Text style={styles.score_text}>Score:{scoreArray.slice(-10)}</Text>
-      <Text style={styles.randomNumber_text}>
-        {randomNumber2} / {randomNumber1} = ?
-      </Text>
+      <View style={styles.score_container}>
+        {/* display last 10 items of scoreArray */}
+        {scoreArrayImage.slice(-10)}
+      </View>
 
-      {/* input field synced with userInput */}
+      <View style={styles.question_container}>
+        <Text style={styles.randomNumber_text}>
+          {randomNumber2} / {randomNumber1} = ?
+        </Text>
+              {/* input field synced with userInput */}
       <TextInput
         style={{
           height: 50,
@@ -442,6 +447,13 @@ export default function DivisionQuizComponent({ navigation, route }) {
                     let tempScoreArray = [...scoreArray];
                     tempScoreArray.push("O");
                     setScoreArray(tempScoreArray);
+                    //push correct.png to scoreArrayImage whenver the user gets the answer correct
+                    let tempScoreArrayImage = [...scoreArrayImage];
+                    tempScoreArrayImage.push(
+                      <Image style={styles.score_image} source={require("../assets/correct.png")} />
+                    );
+                    setScoreArrayImage(tempScoreArrayImage);
+
                     //set tryCount to 0
                     setTryCount(0);
                   } else {
@@ -459,6 +471,12 @@ export default function DivisionQuizComponent({ navigation, route }) {
                     let tempScoreArray = [...scoreArray];
                     tempScoreArray.push("X");
                     setScoreArray(tempScoreArray);
+                    //push remove.png to scoreArrayImage whenver the user gets the answer incorrect
+                    let tempScoreArrayImage = [...scoreArrayImage];
+                    tempScoreArrayImage.push(
+                      <Image style={styles.score_image} source={require("../assets/remove.png")} />
+                    );
+                    setScoreArrayImage(tempScoreArrayImage);
                   }
                 }
                 break;
@@ -480,17 +498,21 @@ export default function DivisionQuizComponent({ navigation, route }) {
       >
         <Text style={styles.button_text}>Quit</Text>
       </TouchableOpacity>
+      </View>
+
+
+
 
       {/* display answer */}
       <Text style={{ color: "white" }}>Answer: {(answer * 100).toFixed(5)}%</Text>
       {/* display tryCount */}
-      <Text>Try Count: {TryCount}</Text>
+      <Text style={{ color: "white" }}>Try Count: {TryCount}</Text>
 
       {/* display modal that contains a touchableOpacity that says next whenever Correct alert appears */}
       <Modal animationType="fade" transparent={true} visible={modalCorrectAnsVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Numbers from calculation steps:</Text>
+            <Text style={styles.modalText}>Correct!</Text>
             <View style={styles.modalGridContainer}>{tempArray}</View>
 
             {/*a TouchableOpacity that when you click on it, it will refresh randomnumber1 and randomnumber2 */}
@@ -543,8 +565,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#141414",
-    alignItems: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
+  },
+  score_container: {
+    flexDirection: "row",
     justifyContent: "center",
+    alignItems: "center",
+    borderColor: "blue",
+    borderWidth: 1,
+    height:40,
+    marginTop: 10,
+  },
+  score_image: {
+    width: 30,
+    height: 30,
+    margin: 2,
+  },
+  question_container:{
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "red",
+    borderWidth: 1,
+    flex:1,
   },
   next_button: {
     //a button that centers its children
@@ -590,8 +633,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   randomNumber_text: {
-    color: "black",
-    fontSize: 32,
+    fontSize: 40,
     color: "white",
   },
   centeredView: {

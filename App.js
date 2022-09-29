@@ -14,7 +14,7 @@ const App =() => {
     <NavigationContainer>
       <Stack.Navigator 
         //below gets rid of stupid animation when switching screens
-        screenOptions={{ animation: 'none' }}
+        screenOptions={{ animation: 'none', headerShown: false }}
       >
         <Stack.Screen name="MainPage" component={MainPageScreen} />
         <Stack.Screen name="DivisionQuiz" component={DivisionQuizScreen} />
