@@ -365,7 +365,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
     setTempArray(finalTempArray);
     return finalTempArray;
   };
-  
 
   //functions to run as soon as the app loads up
   useEffect(() => {
@@ -375,118 +374,123 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="auto" />
       <View style={styles.score_container}>
         {/* display last 10 items of scoreArray */}
         {scoreArrayImage.slice(-10)}
       </View>
 
       <View style={styles.question_container}>
+        {/* display tryCount */}
+        <Text style={{ color: "white" }}>Try Count: {TryCount}</Text>
         <Text style={styles.randomNumber_text}>
           {randomNumber2} / {randomNumber1} = ?
         </Text>
-              {/* input field synced with userInput */}
-      <TextInput
-        style={{
-          height: 50,
-          width: 150,
-          textAlign: "center",
-          borderRadius: 5,
-          color: "white",
-          margin: 10,
-          fontSize: 20,
-          borderWidth: textInputBorderWidth,
-          borderColor: "white",
-          //outline none gets rid of default styling of TextInput onFocus
-          outline: "none",
-          // outlineColor: "red",
-        }}
-        onChangeText={(text) => setUserInput(text)}
-        placeholder="your answer..."
-        placeholderTextColor={"#525252"}
-        value={userInput}
-        keyboardType="number-pad"
-        onBlur={() => setTextInputBorderWidth(0)}
-        onFocus={() => setTextInputBorderWidth(3)}
-        //caretHidden hides blinking cursor
-        caretHidden={true}
-        autoFocus={true}
-      />
-      {/* a TouchableOpacity titled check */}
-      <TouchableOpacity
-        style={styles.check_button}
-        onPress={() => {
-          //convert userInput to string and then to array
-          let tempUserInputString = userInput.toString().split("");
-          setUserInputString(tempUserInputString);
+      </View>
 
-          //run the grid function to put the calculation steps numbers into a grid
-          generateGrid();
-          //renders the tempgrid 2d array in a 2d manner
-          displayGrid();
+      <View style={styles.answer_field_container}>
+        <TextInput
+          style={{
+            height: 60,
+            width: 130,
+            textAlign: "center",
+            borderRadius: 5,
+            color: "white",
+            margin: 10,
+            fontSize: 28,
+            borderWidth: textInputBorderWidth,
+            borderColor: "white",
+            //outline none gets rid of default styling of TextInput onFocus
+            outline: "none",
+            // outlineColor: "red",
+          }}
+          onChangeText={(text) => setUserInput(text)}
+          placeholder="....."
+          placeholderTextColor={"#525252"}
+          value={userInput}
+          keyboardType="number-pad"
+          onBlur={() => setTextInputBorderWidth(0)}
+          onFocus={() => setTextInputBorderWidth(3)}
+          //caretHidden hides blinking cursor
+          caretHidden={true}
+        />
+        {/* a TouchableOpacity titled check */}
+        <TouchableOpacity
+          style={styles.check_button}
+          onPress={() => {
+            //convert userInput to string and then to array
+            let tempUserInputString = userInput.toString().split("");
+            setUserInputString(tempUserInputString);
 
-          //if tempUserInputString is empty then alert field is empty
-          if (tempUserInputString.length == 0) {
-            alert("Field is empty");
-          } else {
-            //if userInputString is not empty (meaning user has entered something)
-            for (let i = 0; i < 9; i++) {
-              if (answerStringInPercent[i] != "0") {
-                let tempAnswerWhereRelevantDigitHappens = i;
-                setanswerWhereRelevantDigitHappens(tempAnswerWhereRelevantDigitHappens);
-                //Check if the user input is correct
-                if (
-                  answerStringInPercent[i] == tempUserInputString[i] &&
-                  answerStringInPercent[i + 1] == tempUserInputString[i + 1]
-                ) {
-                  setTryCount(TryCount + 1);
-                  //make modal visible
-                  setModalCorrectAnsVisible(true);
-                  //check if tryCount is 1
-                  if (TryCount == 0) {
-                    //push O to scoreArray whenver the user gets the answer correct
-                    let tempScoreArray = [...scoreArray];
-                    tempScoreArray.push("O");
-                    setScoreArray(tempScoreArray);
-                    //push correct.png to scoreArrayImage whenver the user gets the answer correct
-                    let tempScoreArrayImage = [...scoreArrayImage];
-                    tempScoreArrayImage.push(
-                      <Image style={styles.score_image} source={require("../assets/correct.png")} />
-                    );
-                    setScoreArrayImage(tempScoreArrayImage);
+            //run the grid function to put the calculation steps numbers into a grid
+            generateGrid();
+            //renders the tempgrid 2d array in a 2d manner
+            displayGrid();
 
-                    //set tryCount to 0
-                    setTryCount(0);
+            //if tempUserInputString is empty then alert field is empty
+            if (tempUserInputString.length == 0) {
+              alert("Field is empty");
+            } else {
+              //if userInputString is not empty (meaning user has entered something)
+              for (let i = 0; i < 9; i++) {
+                if (answerStringInPercent[i] != "0") {
+                  let tempAnswerWhereRelevantDigitHappens = i;
+                  setanswerWhereRelevantDigitHappens(tempAnswerWhereRelevantDigitHappens);
+                  //Check if the user input is correct
+                  if (
+                    answerStringInPercent[i] == tempUserInputString[i] &&
+                    answerStringInPercent[i + 1] == tempUserInputString[i + 1]
+                  ) {
+                    setTryCount(TryCount + 1);
+                    //make modal visible
+                    setModalCorrectAnsVisible(true);
+                    //check if tryCount is 1
+                    if (TryCount == 0) {
+                      //push O to scoreArray whenver the user gets the answer correct
+                      let tempScoreArray = [...scoreArray];
+                      tempScoreArray.push("O");
+                      setScoreArray(tempScoreArray);
+                      //push correct.png to scoreArrayImage whenver the user gets the answer correct
+                      let tempScoreArrayImage = [...scoreArrayImage];
+                      tempScoreArrayImage.push(
+                        <Image style={styles.score_image} source={require("../assets/correct.png")} />
+                      );
+                      setScoreArrayImage(tempScoreArrayImage);
+
+                      //set tryCount to 0
+                      setTryCount(0);
+                    } else {
+                      setTryCount(0);
+                    }
                   } else {
-                    setTryCount(0);
+                    //If the user input is incorrect
+                    setTryCount(TryCount + 1);
+                    //make modal visible
+                    setModalIncorrectAnsVisible(true);
+                    //check if tryCount is 1
+                    //First Time Getting Wrong
+                    if (TryCount == 0) {
+                      //push X to scoreArray whenver the user gets the answer incorrect
+                      let tempScoreArray = [...scoreArray];
+                      tempScoreArray.push("X");
+                      setScoreArray(tempScoreArray);
+                      //push remove.png to scoreArrayImage whenver the user gets the answer incorrect
+                      let tempScoreArrayImage = [...scoreArrayImage];
+                      tempScoreArrayImage.push(
+                        <Image style={styles.score_image} source={require("../assets/remove.png")} />
+                      );
+                      setScoreArrayImage(tempScoreArrayImage);
+                    }
                   }
-                } else {
-                  //If the user input is incorrect
-                  setTryCount(TryCount + 1);
-                  //make modal visible
-                  setModalIncorrectAnsVisible(true);
-                  //check if tryCount is 1
-                  //First Time Getting Wrong
-                  if (TryCount == 0) {
-                    //push X to scoreArray whenver the user gets the answer incorrect
-                    let tempScoreArray = [...scoreArray];
-                    tempScoreArray.push("X");
-                    setScoreArray(tempScoreArray);
-                    //push remove.png to scoreArrayImage whenver the user gets the answer incorrect
-                    let tempScoreArrayImage = [...scoreArrayImage];
-                    tempScoreArrayImage.push(
-                      <Image style={styles.score_image} source={require("../assets/remove.png")} />
-                    );
-                    setScoreArrayImage(tempScoreArrayImage);
-                  }
+                  break;
                 }
-                break;
               }
             }
-          }
-        }}
-      >
-        <Text style={styles.button_text}>Check</Text>
-      </TouchableOpacity>
+          }}
+        >
+          <Text style={styles.check_button_text}>Check</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* a TouchableOpacity titled quit */}
       <TouchableOpacity
@@ -496,17 +500,11 @@ export default function DivisionQuizComponent({ navigation, route }) {
           navigation.navigate("MainPage");
         }}
       >
-        <Text style={styles.button_text}>Quit</Text>
+        <Text style={styles.button_text}>X</Text>
       </TouchableOpacity>
-      </View>
-
-
-
 
       {/* display answer */}
       <Text style={{ color: "white" }}>Answer: {(answer * 100).toFixed(5)}%</Text>
-      {/* display tryCount */}
-      <Text style={{ color: "white" }}>Try Count: {TryCount}</Text>
 
       {/* display modal that contains a touchableOpacity that says next whenever Correct alert appears */}
       <Modal animationType="fade" transparent={true} visible={modalCorrectAnsVisible}>
@@ -574,20 +572,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderColor: "blue",
     borderWidth: 1,
-    height:40,
-    marginTop: 10,
+    height: 40,
   },
   score_image: {
     width: 30,
     height: 30,
     margin: 2,
   },
-  question_container:{
+  question_container: {
     justifyContent: "center",
     alignItems: "center",
     borderColor: "red",
     borderWidth: 1,
-    flex:1,
+    height: 400,
+  },
+  answer_field_container: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    borderColor: "green",
+    borderWidth: 1,
   },
   next_button: {
     //a button that centers its children
@@ -608,16 +612,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   check_button: {
-    width: 100,
-    height: 50,
+    width: 70,
+    height: 45,
     backgroundColor: "#1aa3ff",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
   },
   quit_button: {
-    width: 100,
-    height: 50,
+    width: 30,
+    height: 30,
     backgroundColor: "red",
     justifyContent: "center",
     alignItems: "center",
@@ -627,13 +631,18 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
   },
+  check_button_text: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
   score_text: {
     color: "black",
     fontSize: 32,
     color: "white",
   },
   randomNumber_text: {
-    fontSize: 40,
+    fontSize: 48,
     color: "white",
   },
   centeredView: {
