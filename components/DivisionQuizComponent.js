@@ -20,6 +20,8 @@ export default function DivisionQuizComponent({ navigation, route }) {
   const [NumbersFromCalculationStepsArray, setNumbersFromCalculationsStepsArray] = useState([]);
   const [tempArray, setTempArray] = useState([]);
 
+  const [textInputBorderWidth, setTextInputBorderWidth] = useState(0);
+
   let tempGrid = [];
 
   //set up a function that generates two random numbers for Division questions
@@ -379,10 +381,30 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
       {/* input field synced with userInput */}
       <TextInput
-        style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
+        style={{
+          height: 50,
+          width: 150,
+          textAlign: "center",
+          borderRadius: 5,
+          color: "white",
+          margin: 10,
+          fontSize: 20,
+          borderWidth: textInputBorderWidth,
+          borderColor: "white",
+          //outline none gets rid of default styling of TextInput onFocus
+          outline: "none",
+          // outlineColor: "red",
+        }}
         onChangeText={(text) => setUserInput(text)}
-        placeholder="Enter your answer"
+        placeholder="your answer..."
+        placeholderTextColor={"#525252"}
         value={userInput}
+        keyboardType="number-pad"
+        onBlur={() => setTextInputBorderWidth(0)}
+        onFocus={() => setTextInputBorderWidth(3)}
+        //caretHidden hides blinking cursor
+        caretHidden={true}
+        autoFocus={true}
       />
       {/* a TouchableOpacity titled check */}
       <TouchableOpacity
@@ -460,7 +482,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
       </TouchableOpacity>
 
       {/* display answer */}
-      <Text>Answer: {(answer * 100).toFixed(5)}%</Text>
+      <Text style={{ color: "white" }}>Answer: {(answer * 100).toFixed(5)}%</Text>
       {/* display tryCount */}
       <Text>Try Count: {TryCount}</Text>
 
@@ -520,7 +542,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#141414",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -565,10 +587,12 @@ const styles = StyleSheet.create({
   score_text: {
     color: "black",
     fontSize: 32,
+    color: "white",
   },
   randomNumber_text: {
     color: "black",
     fontSize: 32,
+    color: "white",
   },
   centeredView: {
     flex: 1,

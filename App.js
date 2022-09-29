@@ -12,7 +12,10 @@ const Stack = createNativeStackNavigator();
 const App =() => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator 
+        //below gets rid of stupid animation when switching screens
+        screenOptions={{ animation: 'none' }}
+      >
         <Stack.Screen name="MainPage" component={MainPageScreen} />
         <Stack.Screen name="DivisionQuiz" component={DivisionQuizScreen} />
         <Stack.Screen name="CompoundingQuiz" component={CompoundingQuizScreen} />
