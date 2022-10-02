@@ -12,7 +12,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
   const [answerString, setAnswerString] = useState();
   const [answerStringInPercent, SetAnswerStringInPercent] = useState();
   const [userInputString, setUserInputString] = useState();
-  const [answerWhereRelevantDigitHappens, setanswerWhereRelevantDigitHappens] = useState();
   const [scoreArray, setScoreArray] = useState([]);
   const [scoreArrayImage, setScoreArrayImage] = useState([]);
   const [modalCorrectAnsVisible, setModalCorrectAnsVisible] = useState(false);
@@ -436,8 +435,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
               //if userInputString is not empty (meaning user has entered something)
               for (let i = 0; i < 9; i++) {
                 if (answerStringInPercent[i] != "0") {
-                  let tempAnswerWhereRelevantDigitHappens = i;
-                  setanswerWhereRelevantDigitHappens(tempAnswerWhereRelevantDigitHappens);
                   //Check if the user input is correct
                   if (
                     answerStringInPercent[i] == tempUserInputString[i] &&
@@ -590,7 +587,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 navigation.navigate("MainPage");
               }}
             >
-              <Text style={styles.return_home_button}>Return Home</Text>
+              <Text style={styles.return_home_button_text}>Return Home</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -684,6 +681,18 @@ const styles = StyleSheet.create({
   randomNumber_text: {
     fontSize: 48,
     color: "white",
+  },
+  return_home_button: {
+    width: 100,
+    height: 50,
+    backgroundColor: "#62bf5c",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  return_home_button_text: {
+    color: "white",
+    fontSize: 16,
   },
   centeredView: {
     flex: 1,
