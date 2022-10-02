@@ -17,7 +17,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
   const [scoreArrayImage, setScoreArrayImage] = useState([]);
   const [modalCorrectAnsVisible, setModalCorrectAnsVisible] = useState(false);
   const [modalIncorrectAnsVisible, setModalIncorrectAnsVisible] = useState(false);
+  const [modalQuizCompleteVisible, setModalQuizCompleteVisible] = useState(false);
   const [TryCount, setTryCount] = useState(0);
+  const [QuizComplete, setQuizComplete] = useState(false);
   const [NumbersFromCalculationStepsArray, setNumbersFromCalculationsStepsArray] = useState([]);
   const [tempArray, setTempArray] = useState([]);
 
@@ -442,8 +444,26 @@ export default function DivisionQuizComponent({ navigation, route }) {
                     answerStringInPercent[i + 1] == tempUserInputString[i + 1]
                   ) {
                     setTryCount(TryCount + 1);
-                    //make modal visible
-                    setModalCorrectAnsVisible(true);
+                    
+                    //check if the user has gotten 9 correct answers in the past 9 answers (meaning the user has gotten 9 correct answers in a row)
+                    let score_correct_in_a_row = 0;
+                    let reverse_last10_score_array = scoreArray.slice(-10).reverse();
+                    for (let i = 0; i < 9; i++) {
+                      if (reverse_last10_score_array[i] == "O") {
+                        score_correct_in_a_row = score_correct_in_a_row + 1;
+                      }
+                    }
+                    //make CorrectAnsmodal visible if user has less than 9 Os in the scoreArray
+                    if (score_correct_in_a_row < 9) {
+                      setModalCorrectAnsVisible(true);
+                    } else {
+                      //if user has 9 or more Os in the scoreArray then make the CompleteQuizmodal visible
+                      setModalQuizCompleteVisible(true);
+                      //then set QuizComplete state to true
+                      setQuizComplete(true);
+                    }
+
+
                     //check if tryCount is 1
                     if (TryCount == 0) {
                       //push O to scoreArray whenver the user gets the answer correct
@@ -554,7 +574,27 @@ export default function DivisionQuizComponent({ navigation, route }) {
         </View>
       </Modal>
 
-      <StatusBar style="auto" />
+      {/* modal that appears when the user gets 10 questions correct in a row */}
+      <Modal animationType="fade" transparent={true} visible={modalQuizCompleteVisible}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Complete!</Text>
+
+            {/* a button that closes modal and bring user to main page */}
+            <TouchableOpacity
+              style={styles.return_home_button}
+              onPress={() => {
+                //close the modal
+                setModalCorrectAnsVisible(!modalQuizCompleteVisible);
+                //navigate to MainScreen
+                navigation.navigate("MainPage");
+              }}
+            >
+              <Text style={styles.return_home_button}>Return Home</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
