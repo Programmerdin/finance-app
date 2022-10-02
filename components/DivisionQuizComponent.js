@@ -368,17 +368,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
     return finalTempArray;
   };
 
-  const userInputCleanUp = (userInput_String_Array) => {
-    //if first element is . followed by a number (meaning that the user skipped out on inputting the first 0)
-    //ex) .38 instead of 0.38
-    //then add a 0 to the beginning of the stringArray
-    if (userInput_String_Array[0] == "." && userInput_String_Array[1]) {
-      setCleanedUserInputString(["0", ...userInput_String_Array])
-    } else{
-      setCleanedUserInputString(userInput_String_Array)
-    }
-  }
-
   //functions to run as soon as the app loads up
   useEffect(() => {
     //generate random numbers for division
@@ -433,34 +422,36 @@ export default function DivisionQuizComponent({ navigation, route }) {
           onPress={() => {
             //convert userInput to string and then to array
             let tempUserInputString = userInput.toString().split("");
+            let cleanTempUserInputString = [];
             setUserInputString(tempUserInputString);
-            //clean up userInput 
-            userInputCleanUp(tempUserInputString);
+            //clean up userInput
+            //if first element is . followed by a number (meaning that the user skipped out on inputting the first 0)
+            //ex) .38 instead of 0.38
+            //then add a 0 to the beginning of the stringArray
             if (tempUserInputString[0] == "." && tempUserInputString[1]) {
-              setCleanedUserInputString(["0", ...tempUserInputString])
-            } else{
-              setCleanedUserInputString(tempUserInputString)
+              cleanTempUserInputString = ["0", ...tempUserInputString];
+            } else {
+              cleanTempUserInputString = tempUserInputString;
             }
+            console.log(answerString)
 
             //run the grid function to put the calculation steps numbers into a grid
             generateGrid();
             //renders the tempgrid 2d array in a 2d manner
             displayGrid();
 
-            //if tempUserInputString is empty then alert field is empty
-            if (tempUserInputString.length == 0) {
+            //if tempUserInputString is empty then show alert that field is empty
+            if (cleanTempUserInputString.length == 0) {
               alert("Field is empty");
             } else {
-              //if userInputString is not empty (meaning user has entered something)
               for (let i = 0; i < 9; i++) {
-                if (answerString[i] != "0") {
+                //if userInputString is not empty (meaning user has entered something)
+                if (answerString[i]) {
                   //Check if the user input is correct
-                  if (
-                    answerString[i] == tempUserInputString[i] &&
-                    answerString[i + 1] == tempUserInputString[i + 1]
-                  ) {
+                  //check if the first two relevant digits are correct by comparing the first two elements of the answerString and userInputString
+                  if (answerString[i] == cleanTempUserInputString[i] && answerString[i + 1] == cleanTempUserInputString[i + 1]) {
                     setTryCount(TryCount + 1);
-                    
+
                     //check if the user has gotten 9 correct answers in the past 9 answers (meaning the user has gotten 9 correct answers in a row)
                     let score_correct_in_a_row = 0;
                     let reverse_last10_score_array = scoreArray.slice(-10).reverse();
@@ -478,7 +469,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
                       //then set QuizComplete state to true
                       setQuizComplete(true);
                     }
-
 
                     //check if tryCount is 1
                     if (TryCount == 0) {
