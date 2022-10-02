@@ -12,6 +12,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
   const [answerString, setAnswerString] = useState();
   const [answerStringInPercent, SetAnswerStringInPercent] = useState();
   const [userInputString, setUserInputString] = useState();
+  const [cleanedUserInputString, setCleanedUserInputString] = useState();
   const [scoreArray, setScoreArray] = useState([]);
   const [scoreArrayImage, setScoreArrayImage] = useState([]);
   const [modalCorrectAnsVisible, setModalCorrectAnsVisible] = useState(false);
@@ -367,6 +368,17 @@ export default function DivisionQuizComponent({ navigation, route }) {
     return finalTempArray;
   };
 
+  const userInputCleanUp = (userInput_String_Array) => {
+    //if first element is . followed by a number (meaning that the user skipped out on inputting the first 0)
+    //ex) .38 instead of 0.38
+    //then add a 0 to the beginning of the stringArray
+    if (userInput_String_Array[0] == "." && userInput_String_Array[1]) {
+      setCleanedUserInputString(["0", ...userInput_String_Array])
+    } else{
+      setCleanedUserInputString(userInput_String_Array)
+    }
+  }
+
   //functions to run as soon as the app loads up
   useEffect(() => {
     //generate random numbers for division
@@ -422,6 +434,13 @@ export default function DivisionQuizComponent({ navigation, route }) {
             //convert userInput to string and then to array
             let tempUserInputString = userInput.toString().split("");
             setUserInputString(tempUserInputString);
+            //clean up userInput 
+            userInputCleanUp(tempUserInputString);
+            if (tempUserInputString[0] == "." && tempUserInputString[1]) {
+              setCleanedUserInputString(["0", ...tempUserInputString])
+            } else{
+              setCleanedUserInputString(tempUserInputString)
+            }
 
             //run the grid function to put the calculation steps numbers into a grid
             generateGrid();
@@ -434,11 +453,11 @@ export default function DivisionQuizComponent({ navigation, route }) {
             } else {
               //if userInputString is not empty (meaning user has entered something)
               for (let i = 0; i < 9; i++) {
-                if (answerStringInPercent[i] != "0") {
+                if (answerString[i] != "0") {
                   //Check if the user input is correct
                   if (
-                    answerStringInPercent[i] == tempUserInputString[i] &&
-                    answerStringInPercent[i + 1] == tempUserInputString[i + 1]
+                    answerString[i] == tempUserInputString[i] &&
+                    answerString[i + 1] == tempUserInputString[i + 1]
                   ) {
                     setTryCount(TryCount + 1);
                     
