@@ -426,8 +426,8 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
             //convert userInput to string and then to array
             let tempUserInputString = userInput.toString().split("");
-            
-            //clean up userInput to a uniform format 
+
+            //clean up userInput to a uniform format
             let cleanTempUserInputString = [];
             setUserInputString(tempUserInputString);
             //if first element is . followed by a number (meaning that the user skipped out on inputting the first 0)
@@ -444,78 +444,125 @@ export default function DivisionQuizComponent({ navigation, route }) {
             //renders the tempgrid 2d array in a 2d manner
             displayGrid();
 
+            //set up a variable for the purpose of if the correct answer has been entered or not
+            let did_correct_ans_happened = false;
+            //set up a variable for the purpose of checking if the first non-zero digit in the decimal answer happened or not
+            let did_relevant_digit_happened = false;
+            let relevant_digit_index = 0;
+            //adjust the below variable if you want the users to get more or less than 2 digits after relevant digit
+            let requried_correct_relevant_digit_count = 2;
+            let requried_correct_count_prior_to_relevant_digit = 0;
+            let requried_correct_relevant_digit_counter = requried_correct_relevant_digit_count;
+
             //if tempUserInputString is empty then show alert that field is empty
             if (cleanTempUserInputString.length == 0) {
               alert("Field is empty");
-            } else {
-              //if userInputString is not empty (meaning user has entered something)
-              //set up a variable for the purpose of checking if the first non-zero digit in the decimal answer happened or not
-              let did_relevant_digit_happened = false;
-              //set up a variable for the purpose of if the correct answer has been entered or not
-              let did_correct_ans_happened = false;
 
+              //if userInputString is not empty (meaning user has entered something)
+            } else {
               //set up a loop to go through the decimal answer and compare it to cleaned user input
               for (let i = 0; i < 9; i++) {
-                if (answerString[i]) {
-                  //Check if the user input is correct
-                  //check if the first two relevant digits are correct by comparing the first two elements of the answerString and userInputString
-                  if (answerString[i] == cleanTempUserInputString[i] && answerString[i + 1] == cleanTempUserInputString[i + 1]) {
-
-                    //check if the user has gotten 9 correct answers in the past 9 answers (meaning the user has gotten 9 correct answers in a row)
-                    let score_correct_in_a_row = 0;
-                    let reverse_last10_score_array = scoreArray.slice(-10).reverse();
-                    for (let i = 0; i < 9; i++) {
-                      if (reverse_last10_score_array[i] == "O") {
-                        score_correct_in_a_row = score_correct_in_a_row + 1;
-                      }
-                    }
-                    //make CorrectAnsModal visible if user has less than 9 Os in the scoreArray
-                    if (score_correct_in_a_row < 9) {
-                      setModalCorrectAnsVisible(true);
-                    } else {
-                      //if user has 9 or more Os in the scoreArray then make the CompleteQuizmodal visible
-                      setModalQuizCompleteVisible(true);
-                      //then set QuizComplete state to true
-                      setQuizComplete(true);
-                    }
-
-                    //check if tryCount is 1
-                    if (TryCount == 0) {
-                      //push O to scoreArray whenver the user gets the answer correct
-                      let tempScoreArray = [...scoreArray];
-                      tempScoreArray.push("O");
-                      setScoreArray(tempScoreArray);
-                      //push correct.png to scoreArrayImage whenver the user gets the answer correct
-                      let tempScoreArrayImage = [...scoreArrayImage];
-                      tempScoreArrayImage.push(
-                        <Image style={styles.score_image} source={require("../assets/correct.png")} />
-                      );
-                      setScoreArrayImage(tempScoreArrayImage);
-                    }
-                    //set tryCount to 0 once the user gets the answer correct regardless of how many tries it took
-                    setTryCount(0);
-                  } else {
-                    //If the user input is incorrect
-                    setTryCount(TryCount + 1);
-                    //make modal visible
-                    setModalIncorrectAnsVisible(true);
-                    //check if tryCount is 1
-                    //First Time Getting Wrong
-                    if (TryCount == 0) {
-                      //push X to scoreArray whenver the user gets the answer incorrect
-                      let tempScoreArray = [...scoreArray];
-                      tempScoreArray.push("X");
-                      setScoreArray(tempScoreArray);
-                      //push remove.png to scoreArrayImage whenver the user gets the answer incorrect
-                      let tempScoreArrayImage = [...scoreArrayImage];
-                      tempScoreArrayImage.push(
-                        <Image style={styles.score_image} source={require("../assets/remove.png")} />
-                      );
-                      setScoreArrayImage(tempScoreArrayImage);
-                    }
-                  }
+                //check if the current digit is a non-zero or non-"." digit
+                if (answerString[i] != 0 && answerString[i] != ".") {
+                  //if it is a non-zero or non-"." digit then set did_relevant_digit_happened to true
+                  did_relevant_digit_happened = true;
+                  relevant_digit_index = i;
+                  requried_correct_count_prior_to_relevant_digit = i;
                   break;
                 }
+              }
+
+              //check through digits previous to relevant digit and make sure they are correct
+              for (let i = 0; i < relevant_digit_index; i++) {
+                if (answerString[i] == cleanTempUserInputString[i]) {
+                  //the count will hit 0 if user enters correct answer digits before relevant digit
+                  requried_correct_count_prior_to_relevant_digit = requried_correct_count_prior_to_relevant_digit - 1;
+                }
+              }
+
+              //check through digits after (and including) relevant digit and make sure they are correct
+              console.log("relevant_digit_index: " + relevant_digit_index);
+              console.log("requried_correct_relevant_digit_count: " + requried_correct_relevant_digit_count);
+              console.log("prior_to_relevant_digit counter: " + requried_correct_count_prior_to_relevant_digit);
+              for (let i = 0; i < requried_correct_relevant_digit_count; i++) {
+                //check if the current digit after the relevant digit exist in the user input
+                if (cleanTempUserInputString[relevant_digit_index + i]) {
+                  //if it does exist then check if it is correct
+                  if (answerString[relevant_digit_index + i] == cleanTempUserInputString[relevant_digit_index + i]) {
+                    //if it is correct then decrease the counter by 1
+                    requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
+                    console.log("A: relevant digit counter: " + requried_correct_relevant_digit_counter);
+                  }
+                  //if the current digit after the relevant digit does not exist in the user input
+                } else {
+                  //check if the current digit after the relevant digit is 0
+                  if (answerString[relevant_digit_index + i] == 0) {
+                    //if it is 0 then decrease the counter by 1
+                    requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
+                    console.log("B: relevant digit counter: " + requried_correct_relevant_digit_counter);
+                  }
+                }
+              }
+
+              //once required correct relevant digit count is 0 then set did_correct_ans_happened to true
+              if (requried_correct_relevant_digit_counter == 0 && requried_correct_count_prior_to_relevant_digit == 0) {
+                did_correct_ans_happened = true;
+              }
+            }
+
+            //if did_correct_ans_happened is true then show modal that the answer is correct
+            if (did_correct_ans_happened) {
+              //check if the user has gotten 9 correct answers in the past 9 answers (meaning the user has gotten 9 correct answers in a row)
+              let score_correct_in_a_row = 0;
+              let reverse_last10_score_array = scoreArray.slice(-10).reverse();
+              for (let i = 0; i < 9; i++) {
+                if (reverse_last10_score_array[i] == "O") {
+                  score_correct_in_a_row = score_correct_in_a_row + 1;
+                }
+              }
+              //make CorrectAnsModal visible if user has less than 9 Os in the scoreArray
+              if (score_correct_in_a_row < 9) {
+                setModalCorrectAnsVisible(true);
+              } else {
+                //if user has 9 or more Os in the scoreArray then make the CompleteQuizmodal visible
+                setModalQuizCompleteVisible(true);
+                //then set QuizComplete state to true
+                setQuizComplete(true);
+              }
+
+              //check if tryCount is 1
+              if (TryCount == 0) {
+                //push O to scoreArray whenver the user gets the answer correct
+                let tempScoreArray = [...scoreArray];
+                tempScoreArray.push("O");
+                setScoreArray(tempScoreArray);
+                //push correct.png to scoreArrayImage whenver the user gets the answer correct
+                let tempScoreArrayImage = [...scoreArrayImage];
+                tempScoreArrayImage.push(
+                  <Image style={styles.score_image} source={require("../assets/correct.png")} />
+                );
+                setScoreArrayImage(tempScoreArrayImage);
+              }
+              //set tryCount to 0 once the user gets the answer correct regardless of how many tries it took
+              setTryCount(0);
+
+              //if the correct has not been entered then show the wrong answer modal
+            } else {
+              //If the user input is incorrect
+              setTryCount(TryCount + 1);
+              //make modal visible
+              setModalIncorrectAnsVisible(true);
+              //check if tryCount is 1
+              //First Time Getting Wrong
+              if (TryCount == 0) {
+                //push X to scoreArray whenver the user gets the answer incorrect
+                let tempScoreArray = [...scoreArray];
+                tempScoreArray.push("X");
+                setScoreArray(tempScoreArray);
+                //push remove.png to scoreArrayImage whenver the user gets the answer incorrect
+                let tempScoreArrayImage = [...scoreArrayImage];
+                tempScoreArrayImage.push(<Image style={styles.score_image} source={require("../assets/remove.png")} />);
+                setScoreArrayImage(tempScoreArrayImage);
               }
             }
           }}
