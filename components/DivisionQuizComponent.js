@@ -420,11 +420,16 @@ export default function DivisionQuizComponent({ navigation, route }) {
         <TouchableOpacity
           style={styles.check_button}
           onPress={() => {
+            //add 1 to the try count everytime the check button is pressed
+            //but try count is only updated on the next frame render so it will still be treated as 0 for the first run through of the code and only be updated to 1 next frame
+            setTryCount(TryCount + 1);
+
             //convert userInput to string and then to array
             let tempUserInputString = userInput.toString().split("");
+            
+            //clean up userInput to a uniform format 
             let cleanTempUserInputString = [];
             setUserInputString(tempUserInputString);
-            //clean up userInput
             //if first element is . followed by a number (meaning that the user skipped out on inputting the first 0)
             //ex) .38 instead of 0.38
             //then add a 0 to the beginning of the stringArray
@@ -433,7 +438,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
             } else {
               cleanTempUserInputString = tempUserInputString;
             }
-            console.log(answerString)
 
             //run the grid function to put the calculation steps numbers into a grid
             generateGrid();
@@ -444,13 +448,18 @@ export default function DivisionQuizComponent({ navigation, route }) {
             if (cleanTempUserInputString.length == 0) {
               alert("Field is empty");
             } else {
+              //if userInputString is not empty (meaning user has entered something)
+              //set up a variable for the purpose of checking if the first non-zero digit in the decimal answer happened or not
+              let did_relevant_digit_happened = false;
+              //set up a variable for the purpose of if the correct answer has been entered or not
+              let did_correct_ans_happened = false;
+
+              //set up a loop to go through the decimal answer and compare it to cleaned user input
               for (let i = 0; i < 9; i++) {
-                //if userInputString is not empty (meaning user has entered something)
                 if (answerString[i]) {
                   //Check if the user input is correct
                   //check if the first two relevant digits are correct by comparing the first two elements of the answerString and userInputString
                   if (answerString[i] == cleanTempUserInputString[i] && answerString[i + 1] == cleanTempUserInputString[i + 1]) {
-                    setTryCount(TryCount + 1);
 
                     //check if the user has gotten 9 correct answers in the past 9 answers (meaning the user has gotten 9 correct answers in a row)
                     let score_correct_in_a_row = 0;
@@ -460,7 +469,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
                         score_correct_in_a_row = score_correct_in_a_row + 1;
                       }
                     }
-                    //make CorrectAnsmodal visible if user has less than 9 Os in the scoreArray
+                    //make CorrectAnsModal visible if user has less than 9 Os in the scoreArray
                     if (score_correct_in_a_row < 9) {
                       setModalCorrectAnsVisible(true);
                     } else {
@@ -482,12 +491,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
                         <Image style={styles.score_image} source={require("../assets/correct.png")} />
                       );
                       setScoreArrayImage(tempScoreArrayImage);
-
-                      //set tryCount to 0
-                      setTryCount(0);
-                    } else {
-                      setTryCount(0);
                     }
+                    //set tryCount to 0 once the user gets the answer correct regardless of how many tries it took
+                    setTryCount(0);
                   } else {
                     //If the user input is incorrect
                     setTryCount(TryCount + 1);
