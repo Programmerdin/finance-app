@@ -25,6 +25,10 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
   const [textInputBorderWidth, setTextInputBorderWidth] = useState(0);
 
+  const [time, setTime] = useState(0);
+  const [timerOn, setTimerOn] = useState(true);//default is true so that timer runs as soon as the quiz starts
+  const [timeRecordArray, setTimeRecordArray] = useState([]);
+
   let tempGrid = [];
 
   //set up a function that generates two random numbers for Division questions
@@ -374,6 +378,24 @@ export default function DivisionQuizComponent({ navigation, route }) {
     generateRandomNumberDivision();
   }, []);
 
+  //start timer on as soon as quiz starts
+  //timer pauses once user gets question correct until does not run until they press on the next question button
+  //record in an array the time it took to get the question correct for every question (like a lap feature on a stopwatch)
+  //timer resumes when user presses on the next question button
+  //timer pauses when user gets 10 questions in a row
+
+  useEffect(() => {
+    let interval = null;
+    if (timerOn) {
+      interval = setInterval(() => {
+        setTime((prevTime) => prevTime + 100);
+      }, 100); // 1000 = 1 second, 100 = 0.1 second
+    } else if (!timerOn) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [timerOn]);
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -481,9 +503,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
               }
 
               //check through digits after (and including) relevant digit and make sure they are correct
-              console.log("relevant_digit_index: " + relevant_digit_index);
-              console.log("requried_correct_relevant_digit_count: " + requried_correct_relevant_digit_count);
-              console.log("prior_to_relevant_digit counter: " + requried_correct_count_prior_to_relevant_digit);
               for (let i = 0; i < requried_correct_relevant_digit_count; i++) {
                 //check if the current digit after the relevant digit exist in the user input
                 if (cleanTempUserInputString[relevant_digit_index + i]) {
@@ -491,7 +510,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
                   if (answerString[relevant_digit_index + i] == cleanTempUserInputString[relevant_digit_index + i]) {
                     //if it is correct then decrease the counter by 1
                     requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
-                    console.log("A: relevant digit counter: " + requried_correct_relevant_digit_counter);
                   }
                   //if the current digit after the relevant digit does not exist in the user input
                 } else {
@@ -499,7 +517,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
                   if (answerString[relevant_digit_index + i] == 0) {
                     //if it is 0 then decrease the counter by 1
                     requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
-                    console.log("B: relevant digit counter: " + requried_correct_relevant_digit_counter);
                   }
                 }
               }
@@ -512,9 +529,15 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
             //if did_correct_ans_happened is true then show modal that the answer is correct
             if (did_correct_ans_happened) {
+              //reset the timer and push the current time to the time array and reset the timer
+              setTimerOn(false);
+              setTimeRecordArray([...timeRecordArray, time]);
+              setTime(0);
+
               //check if the user has gotten 9 correct answers in the past 9 answers (meaning the user has gotten 9 correct answers in a row)
               let score_correct_in_a_row = 0;
               let reverse_last10_score_array = scoreArray.slice(-10).reverse();
+
               for (let i = 0; i < 9; i++) {
                 if (reverse_last10_score_array[i] == "O") {
                   score_correct_in_a_row = score_correct_in_a_row + 1;
@@ -522,6 +545,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
               }
               //make CorrectAnsModal visible if user has less than 9 Os in the scoreArray
               if (score_correct_in_a_row < 9) {
+                //pause the timer and push the current time to the time array and reset the timer
+                setTimerOn(false);
+                setTimeRecordArray([...timeRecordArray, time]);
                 setModalCorrectAnsVisible(true);
               } else {
                 //if user has 9 or more Os in the scoreArray then make the CompleteQuizmodal visible
@@ -602,10 +628,13 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 setModalCorrectAnsVisible(!modalCorrectAnsVisible);
                 //empty the user input field
                 setUserInput("");
+                //restart the timer
+                setTimerOn(true);
               }}
             >
               <Text style={styles.button_text}>Next</Text>
             </TouchableOpacity>
+            <Text>Time Record: {timeRecordArray.map((record)=><Text>{record}, </Text>)}</Text>
           </View>
         </View>
       </Modal>
@@ -638,6 +667,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Complete!</Text>
+            <Text>Time to complete: {timeRecordArray.reduce((partialSum, a) => partialSum + a, 0)}</Text>
 
             {/* a button that closes modal and bring user to main page */}
             <TouchableOpacity
@@ -654,6 +684,50 @@ export default function DivisionQuizComponent({ navigation, route }) {
           </View>
         </View>
       </Modal>
+
+      <View style={styles.timer_view}>
+        <Text>Timer Component</Text>
+        <Text>Time: {time}</Text>
+        {/* TouchableOpacity that starts the timer */}
+        <TouchableOpacity
+          style={styles.timer_button}
+          onPress={() => {
+            setTimerOn(true);
+          }}
+        >
+          <Text style={styles.button_text}>Start</Text>
+        </TouchableOpacity>
+
+        {/* TouchableOpacity that stops the timer */}
+        <TouchableOpacity
+          style={styles.timer_button}
+          onPress={() => {
+            setTimerOn(false);
+          }}
+        >
+          <Text style={styles.button_text}>Stop</Text>
+        </TouchableOpacity>
+
+        {/* TouchableOpacity that starts the timer */}
+        <TouchableOpacity
+          style={styles.timer_button}
+          onPress={() => {
+            setTimerOn(true);
+          }}
+        >
+          <Text style={styles.button_text}>Resume</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.timer_button}
+          onPress={() => {
+            setTimerOn(false);
+            setTime(0);
+          }}
+        >
+          <Text style={styles.button_text}>Reset</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -784,5 +858,22 @@ const styles = StyleSheet.create({
     // width: 100,
     // height: 100,
     borderWidth: 1,
+  },
+
+  //from here and below is for timer
+  timer_view: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "red",
+    borderWidth: 1,
+    height: 400,
+  },
+  timer_button: {
+    width: 100,
+    height: 50,
+    backgroundColor: "blue",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
   },
 });

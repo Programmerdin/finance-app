@@ -20,6 +20,7 @@ const App =() => {
         <Stack.Screen name="DivisionQuiz" component={DivisionQuizScreen} />
         <Stack.Screen name="CompoundingQuiz" component={CompoundingQuizScreen} />
 
+
       </Stack.Navigator>
     </NavigationContainer>
   );
