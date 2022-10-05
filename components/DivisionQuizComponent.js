@@ -7,7 +7,7 @@ import { TextInput, FlatList } from "react-native";
 export default function DivisionQuizComponent({ navigation, route }) {
   const [randomNumber1, setRandomNumber1] = useState();
   const [randomNumber2, setRandomNumber2] = useState();
-  const [answer, setAnswer] = useState();
+  const [answer, setAnswer] = useState(0);
   const [userInput, setUserInput] = useState("");
   const [answerString, setAnswerString] = useState();
   const [answerStringInPercent, SetAnswerStringInPercent] = useState();
@@ -33,12 +33,10 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
   //set up a function that generates two random numbers for Division questions
   const generateRandomNumberDivision = () => {
-    // let tempNumber1 = Math.floor(Math.random() * 900) + 100;
-    let tempNumber1 = 160
+    let tempNumber1 = Math.floor(Math.random() * 900) + 100;
     setRandomNumber1(tempNumber1);
     // create a variable named tempNumber2 that is less than tempNumber1 and greater than 10
-    // let tempNumber2 = Math.floor(Math.random() * (tempNumber1 - 10)) + 10;
-    let tempNumber2 = 80
+    let tempNumber2 = Math.floor(Math.random() * (tempNumber1 - 10)) + 10;
     setRandomNumber2(tempNumber2);
 
     let tempAnswerInPercent = (tempNumber2 / tempNumber1) * 100;
@@ -51,7 +49,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
     SetAnswerStringInPercent(tempAnswerInPercentArray);
     setAnswerString(tempAnswerArray);
 
-    //store the numbers from calculation steps into an array
+    //store the numbers from calculation steps into an arrayanswer
     let tempAnswer2 = tempNumber2 / tempNumber1;
     let tempAnswer2Array = tempAnswer2.toString().split("");
 
@@ -562,6 +560,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 setModalQuizCompleteVisible(true);
                 //then set QuizComplete state to true
                 setQuizComplete(true);
+                //upload all the data 
+                
+                
               }
 
               //check if tryCount is 1
@@ -617,7 +618,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
       </TouchableOpacity>
 
       {/* display answer */}
-      <Text style={{ color: "white" }}>Answer: {(answer * 100).toFixed(5)}%</Text>
+      <Text style={{ color: "white" }}>Answer: {answer.toFixed(6)}</Text>
 
       {/* display modal that contains a touchableOpacity that says next whenever Correct alert appears */}
       <Modal animationType="fade" transparent={true} visible={modalCorrectAnsVisible}>
@@ -642,7 +643,8 @@ export default function DivisionQuizComponent({ navigation, route }) {
             >
               <Text style={styles.button_text}>Next</Text>
             </TouchableOpacity>
-            <Text>Time Record: {timeRecordArray.map((record)=><Text>{record}, </Text>)}</Text>
+            {/* round to first decimal place to always display the 1st decimal */}
+            <Text>Time Record: {timeRecordArray.map((record)=><Text>{record/1000}s, </Text>)}</Text>
           </View>
         </View>
       </Modal>
@@ -675,7 +677,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Complete!</Text>
-            <Text>Time to complete: {timeRecordArray.reduce((partialSum, a) => partialSum + a, 0)}</Text>
+            <Text>Time to complete: {(timeRecordArray.reduce((partialSum, a) => partialSum + a, 0))/1000}s</Text>
 
             {/* a button that closes modal and bring user to main page */}
             <TouchableOpacity
@@ -696,45 +698,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
       <View style={styles.timer_view}>
         <Text>Timer Component</Text>
         <Text>Time: {time}</Text>
-        {/* TouchableOpacity that starts the timer */}
-        <TouchableOpacity
-          style={styles.timer_button}
-          onPress={() => {
-            setTimerOn(true);
-          }}
-        >
-          <Text style={styles.button_text}>Start</Text>
-        </TouchableOpacity>
-
-        {/* TouchableOpacity that stops the timer */}
-        <TouchableOpacity
-          style={styles.timer_button}
-          onPress={() => {
-            setTimerOn(false);
-          }}
-        >
-          <Text style={styles.button_text}>Stop</Text>
-        </TouchableOpacity>
-
-        {/* TouchableOpacity that starts the timer */}
-        <TouchableOpacity
-          style={styles.timer_button}
-          onPress={() => {
-            setTimerOn(true);
-          }}
-        >
-          <Text style={styles.button_text}>Resume</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.timer_button}
-          onPress={() => {
-            setTimerOn(false);
-            setTime(0);
-          }}
-        >
-          <Text style={styles.button_text}>Reset</Text>
-        </TouchableOpacity>
+        <Text>This section should be invisible</Text>
       </View>
     </View>
   );
@@ -874,7 +838,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderColor: "red",
     borderWidth: 1,
-    height: 400,
+    height: 100,
   },
   timer_button: {
     width: 100,

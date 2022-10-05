@@ -24,14 +24,6 @@ export default function MainPageComponent({navigation, route}){
       >
         <Text style={styles.regular_text}>Compounding</Text>
       </TouchableOpacity>
-
-      {/* TouchableOpacity that navigates to TimerComponent */}
-      <TouchableOpacity
-        style={styles.navigation_button}
-        onPress={() => navigation.navigate("Timer")}
-      >
-        <Text style={styles.regular_text}>Timer</Text>
-      </TouchableOpacity>
       
     </View>
   )
