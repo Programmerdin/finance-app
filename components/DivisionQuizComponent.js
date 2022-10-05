@@ -3,6 +3,16 @@ import { Alert, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View, Imag
 import React from "react";
 import { useState, useEffect } from "react";
 import { TextInput, FlatList } from "react-native";
+import {
+  storeQuizType,
+  storeQuizTotalQuestions,
+  storeQuizTimeAndDate,
+  storeQuizTimeTookToComplete,
+  storeLatestQuizNumber,
+  storeQuizData_All,
+  retrieveLatestQuizNumber,
+} from "./StorageFunctions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DivisionQuizComponent({ navigation, route }) {
   const [randomNumber1, setRandomNumber1] = useState();
@@ -26,7 +36,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
   const [textInputBorderWidth, setTextInputBorderWidth] = useState(0);
 
   const [time, setTime] = useState(0);
-  const [timerOn, setTimerOn] = useState(true);//default is true so that timer runs as soon as the quiz starts
+  const [timerOn, setTimerOn] = useState(true); //default is true so that timer runs as soon as the quiz starts
   const [timeRecordArray, setTimeRecordArray] = useState([]);
 
   let tempGrid = [];
@@ -376,6 +386,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
   useEffect(() => {
     //generate random numbers for division
     generateRandomNumberDivision();
+
+    //retrieve latest quiz number from storage
+    retrieveLatestQuizNumber();
   }, []);
 
   //start timer on as soon as quiz starts
@@ -512,12 +525,12 @@ export default function DivisionQuizComponent({ navigation, route }) {
                     requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
                   } else {
                     //if userinput digit exists while the answerString digit does not exist (meaning the answer is a clean division)
-                    if(!answerString[relevant_digit_index + i]){
+                    if (!answerString[relevant_digit_index + i]) {
                       //decrease the counter by 1
                       requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
                     }
                   }
-                //if the current digit after the relevant digit does not exist in the user input
+                  //if the current digit after the relevant digit does not exist in the user input
                 } else {
                   //check if the current digit after the relevant digit is 0 or answerStringDigit is non existent (meaning the answer is a clean division)
                   if (answerString[relevant_digit_index + i] == 0 || !answerString[relevant_digit_index + i]) {
@@ -560,9 +573,8 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 setModalQuizCompleteVisible(true);
                 //then set QuizComplete state to true
                 setQuizComplete(true);
-                //upload all the data 
-                
-                
+                //upload all the data
+                storeQuizData_All();
               }
 
               //check if tryCount is 1
@@ -644,7 +656,12 @@ export default function DivisionQuizComponent({ navigation, route }) {
               <Text style={styles.button_text}>Next</Text>
             </TouchableOpacity>
             {/* round to first decimal place to always display the 1st decimal */}
-            <Text>Time Record: {timeRecordArray.map((record)=><Text>{record/1000}s, </Text>)}</Text>
+            <Text>
+              Time Record:{" "}
+              {timeRecordArray.map((record) => (
+                <Text>{record / 1000}s, </Text>
+              ))}
+            </Text>
           </View>
         </View>
       </Modal>
@@ -677,7 +694,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Complete!</Text>
-            <Text>Time to complete: {(timeRecordArray.reduce((partialSum, a) => partialSum + a, 0))/1000}s</Text>
+            <Text>Time to complete: {timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000}s</Text>
 
             {/* a button that closes modal and bring user to main page */}
             <TouchableOpacity

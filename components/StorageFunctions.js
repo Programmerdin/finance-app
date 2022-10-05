@@ -1,16 +1,9 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  Alert,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
 import { TextInput } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //save quiz type
 export const storeQuizType = async (Quiz_Type, Quiz_Number_Stringified) => {
@@ -52,7 +45,7 @@ export const storeQuizTimeTookToComplete = async (Quiz_Time_Took_To_Complete, Qu
   }
 };
 
-//save lastest quiz number that was saved
+//save latest quiz number that was saved
 export const storeLatestQuizNumber = async (Quiz_Number_Stringified) => {
   try {
     await AsyncStorage.setItem("Last_Quiz_Number_Saved", Quiz_Number_Stringified);
@@ -62,7 +55,13 @@ export const storeLatestQuizNumber = async (Quiz_Number_Stringified) => {
   }
 };
 
-export function storeQuizData_All(quiz_number, quiz_type, quiz_total_questions, quiz_time_n_date, time_took_to_complete) {
+export function storeQuizData_All(
+  quiz_number,
+  quiz_type,
+  quiz_total_questions,
+  quiz_time_n_date,
+  time_took_to_complete
+) {
   let quiz_number_stringified = quiz_number.toString();
 
   //quiz type
@@ -74,3 +73,23 @@ export function storeQuizData_All(quiz_number, quiz_type, quiz_total_questions, 
   storeQuizTimeTookToComplete(time_took_to_complete, quiz_number_stringified);
   storeLatestQuizNumber(quiz_number_stringified);
 }
+
+//retreieve latest quiz number that was saved
+export const retrieveLatestQuizNumber = async () => {
+  try {
+    const latest_quiz_number = await AsyncStorage.getItem("Last_Quiz_Number_Saved");
+    console.log("latestquiznumber", latest_quiz_number);
+    if (latest_quiz_number !== null) {
+      // value previously stored
+      console.log("Last Quiz Number Saved: ", latest_quiz_number);
+      return latest_quiz_number;
+      //return 0 if latest quiz number is null (meaning no quiz has been saved before)
+    } else {
+      latest_quiz_number = 0;
+      return latest_quiz_number;
+    }
+  } catch (e) {
+    // error reading value
+    console.log("Error reading last quiz number saved", e);
+  }
+};
