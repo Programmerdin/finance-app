@@ -33,10 +33,12 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
   //set up a function that generates two random numbers for Division questions
   const generateRandomNumberDivision = () => {
-    let tempNumber1 = Math.floor(Math.random() * 900) + 100;
+    // let tempNumber1 = Math.floor(Math.random() * 900) + 100;
+    let tempNumber1 = 160
     setRandomNumber1(tempNumber1);
     // create a variable named tempNumber2 that is less than tempNumber1 and greater than 10
-    let tempNumber2 = Math.floor(Math.random() * (tempNumber1 - 10)) + 10;
+    // let tempNumber2 = Math.floor(Math.random() * (tempNumber1 - 10)) + 10;
+    let tempNumber2 = 80
     setRandomNumber2(tempNumber2);
 
     let tempAnswerInPercent = (tempNumber2 / tempNumber1) * 100;
@@ -504,17 +506,23 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
               //check through digits after (and including) relevant digit and make sure they are correct
               for (let i = 0; i < requried_correct_relevant_digit_count; i++) {
-                //check if the current digit after the relevant digit exist in the user input
+                //check if the current digit after and including the relevant digit exist in the user input
                 if (cleanTempUserInputString[relevant_digit_index + i]) {
                   //if it does exist then check if it is correct
                   if (answerString[relevant_digit_index + i] == cleanTempUserInputString[relevant_digit_index + i]) {
                     //if it is correct then decrease the counter by 1
                     requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
+                  } else {
+                    //if userinput digit exists while the answerString digit does not exist (meaning the answer is a clean division)
+                    if(!answerString[relevant_digit_index + i]){
+                      //decrease the counter by 1
+                      requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
+                    }
                   }
-                  //if the current digit after the relevant digit does not exist in the user input
+                //if the current digit after the relevant digit does not exist in the user input
                 } else {
-                  //check if the current digit after the relevant digit is 0
-                  if (answerString[relevant_digit_index + i] == 0) {
+                  //check if the current digit after the relevant digit is 0 or answerStringDigit is non existent (meaning the answer is a clean division)
+                  if (answerString[relevant_digit_index + i] == 0 || !answerString[relevant_digit_index + i]) {
                     //if it is 0 then decrease the counter by 1
                     requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
                   }
