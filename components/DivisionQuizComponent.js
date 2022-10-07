@@ -384,8 +384,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
     return finalTempArray;
   };
 
-  
-
   //functions to run as soon as the app loads up
   useEffect(() => {
     //generate random numbers for division
@@ -398,8 +396,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
       setLatestQuizNumber(parseInt(value, 10));
     });
   }, []);
-
-  
 
   //start timer on as soon as quiz starts
   //timer pauses once user gets question correct until does not run until they press on the next question button
@@ -428,8 +424,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
       </View>
 
       <View style={styles.question_container}>
-        {/* display tryCount */}
-        <Text style={{ color: "white" }}>Try Count: {TryCount}</Text>
         <Text style={styles.randomNumber_text}>
           {randomNumber2} / {randomNumber1} = ?
         </Text>
@@ -583,20 +577,18 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 setModalQuizCompleteVisible(true);
                 //then set QuizComplete state to true
                 setQuizComplete(true);
-                
+
                 //upload all the data
                 //increase quiz number from the previous quiz number
-                
-                
-                setLatestQuizNumber(latestQuizNumber+1);
-                console.log(latestQuizNumber)
+
+                setLatestQuizNumber(latestQuizNumber + 1);
+                console.log(latestQuizNumber);
 
                 //get current date and time
                 let date = new Date().toJSON();
-                let time_took_to_complete = timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000
+                let time_took_to_complete = timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000;
 
-                storeQuizData_All(latestQuizNumber+1, 1, scoreArray.length, date, time_took_to_complete);
-
+                storeQuizData_All(latestQuizNumber + 1, 1, scoreArray.length, date, time_took_to_complete);
               }
 
               //check if tryCount is 1
@@ -653,13 +645,18 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
       {/* display answer */}
       <Text style={{ color: "white" }}>Answer: {answer.toFixed(6)}</Text>
+      {/* display latest Quiz Number Retrieved */}
       <Text>latestQuizNumber: {latestQuizNumber}</Text>
+      {/* display tryCount */}
+      <Text style={{ color: "white" }}>Try Count: {TryCount}</Text>
 
       {/* display modal that contains a touchableOpacity that says next whenever Correct alert appears */}
       <Modal animationType="fade" transparent={true} visible={modalCorrectAnsVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Correct!</Text>
+            <Text>{(Math.round((timeRecordArray.slice(-1) / 1000) * 10) / 10).toFixed(1)}s</Text>
+
             <View style={styles.modalGridContainer}>{tempArray}</View>
 
             {/*a TouchableOpacity that when you click on it, it will refresh randomnumber1 and randomnumber2 */}
@@ -682,7 +679,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
             <Text>
               Time Record:{" "}
               {timeRecordArray.map((record) => (
-                <Text>{record / 1000}s, </Text>
+                <Text>{(Math.round((record / 1000) * 10) / 10).toFixed(1)}s, </Text>
               ))}
             </Text>
           </View>
@@ -718,6 +715,13 @@ export default function DivisionQuizComponent({ navigation, route }) {
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Complete!</Text>
             <Text>Time to complete: {timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000}s</Text>
+            <Text>
+              {" "}
+              Time Record:{" "}
+              {timeRecordArray.map((record) => (
+                <Text>{(Math.round((record / 1000) * 10) / 10).toFixed(1)}s, </Text>
+              ))}
+            </Text>
 
             {/* a button that closes modal and bring user to main page */}
             <TouchableOpacity
