@@ -39,6 +39,8 @@ export default function DivisionQuizComponent({ navigation, route }) {
   const [timerOn, setTimerOn] = useState(true); //default is true so that timer runs as soon as the quiz starts
   const [timeRecordArray, setTimeRecordArray] = useState([]);
 
+  const [latestQuizNumber, setLatestQuizNumber] = useState("0");
+
   let tempGrid = [];
 
   //set up a function that generates two random numbers for Division questions
@@ -382,14 +384,22 @@ export default function DivisionQuizComponent({ navigation, route }) {
     return finalTempArray;
   };
 
+  
+
   //functions to run as soon as the app loads up
   useEffect(() => {
     //generate random numbers for division
     generateRandomNumberDivision();
 
     //retrieve latest quiz number from storage
-    retrieveLatestQuizNumber();
+    retrieveLatestQuizNumber().then((value) => {
+      //set the State from the retrieved value
+      //convert the retrieved value (it comes in string format) to a number format
+      setLatestQuizNumber(parseInt(value, 10));
+    });
   }, []);
+
+  
 
   //start timer on as soon as quiz starts
   //timer pauses once user gets question correct until does not run until they press on the next question button
@@ -573,8 +583,20 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 setModalQuizCompleteVisible(true);
                 //then set QuizComplete state to true
                 setQuizComplete(true);
+                
                 //upload all the data
-                storeQuizData_All();
+                //increase quiz number from the previous quiz number
+                
+                
+                setLatestQuizNumber(latestQuizNumber+1);
+                console.log(latestQuizNumber)
+
+                //get current date and time
+                let date = new Date().toJSON();
+                let time_took_to_complete = timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000
+
+                storeQuizData_All(latestQuizNumber+1, 1, scoreArray.length, date, time_took_to_complete);
+
               }
 
               //check if tryCount is 1
@@ -631,6 +653,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
       {/* display answer */}
       <Text style={{ color: "white" }}>Answer: {answer.toFixed(6)}</Text>
+      <Text>latestQuizNumber: {latestQuizNumber}</Text>
 
       {/* display modal that contains a touchableOpacity that says next whenever Correct alert appears */}
       <Modal animationType="fade" transparent={true} visible={modalCorrectAnsVisible}>

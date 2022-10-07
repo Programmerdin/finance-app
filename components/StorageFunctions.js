@@ -72,21 +72,20 @@ export function storeQuizData_All(
   storeQuizTimeAndDate(quiz_time_n_date, quiz_number_stringified);
   storeQuizTimeTookToComplete(time_took_to_complete, quiz_number_stringified);
   storeLatestQuizNumber(quiz_number_stringified);
+  console.log("function ran")
 }
 
 //retreieve latest quiz number that was saved
 export const retrieveLatestQuizNumber = async () => {
   try {
     const latest_quiz_number = await AsyncStorage.getItem("Last_Quiz_Number_Saved");
-    console.log("latestquiznumber", latest_quiz_number);
     if (latest_quiz_number !== null) {
       // value previously stored
       console.log("Last Quiz Number Saved: ", latest_quiz_number);
       return latest_quiz_number;
       //return 0 if latest quiz number is null (meaning no quiz has been saved before)
     } else {
-      latest_quiz_number = 0;
-      return latest_quiz_number;
+      return 0;
     }
   } catch (e) {
     // error reading value
