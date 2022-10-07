@@ -34,21 +34,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center', //Centered vertically
     alignItems: 'center', // Centered horizontally
     flex:1,
-    backgroundColor:'#141414',
+    backgroundColor:'#121212',
     color: 'white',
   },
   navigation_button:{
     width: 190,
     height: 70,
-    backgroundColor: "#0068a6",
+    backgroundColor: "#BB86FC",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     margin: 10,
   },
   regular_text:{
-    color: 'white',
+    color: '#121212',
+    fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: 25,
+    fontSize: 22,
   }
 })

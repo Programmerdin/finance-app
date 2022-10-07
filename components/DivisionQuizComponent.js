@@ -430,7 +430,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
       </View>
 
       <View style={styles.answer_field_container}>
-        <TextInput
+      <TextInput
           style={{
             height: 60,
             width: 130,
@@ -630,6 +630,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         >
           <Text style={styles.check_button_text}>Check</Text>
         </TouchableOpacity>
+
       </View>
 
       {/* a TouchableOpacity titled quit */}
@@ -646,7 +647,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
       {/* display answer */}
       <Text style={{ color: "white" }}>Answer: {answer.toFixed(6)}</Text>
       {/* display latest Quiz Number Retrieved */}
-      <Text>latestQuizNumber: {latestQuizNumber}</Text>
+      <Text style={{color: "white"}}>latestQuizNumber: {latestQuizNumber}</Text>
       {/* display tryCount */}
       <Text style={{ color: "white" }}>Try Count: {TryCount}</Text>
 
@@ -740,9 +741,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
       </Modal>
 
       <View style={styles.timer_view}>
-        <Text>Timer Component</Text>
-        <Text>Time: {time}</Text>
-        <Text>This section should be invisible</Text>
+        <Text style={styles.basic_text}>Timer Component</Text>
+        <Text style={styles.basic_text}>Time: {time}</Text>
+        <Text style={styles.basic_text}>This section should be invisible</Text>
       </View>
     </View>
   );
@@ -751,7 +752,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#141414",
+    backgroundColor: "#121212",
     // alignItems: "center",
     // justifyContent: "center",
   },
@@ -854,7 +855,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "#fff194",
+    backgroundColor: "#222222",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -882,7 +883,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderColor: "red",
     borderWidth: 1,
-    height: 100,
+    height: 80,
   },
   timer_button: {
     width: 100,
@@ -892,4 +893,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
   },
+  basic_text:{
+    color: "white",
+    fontSize: 16,
+  },
+
 });
