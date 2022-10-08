@@ -209,7 +209,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
       let veryTempArray = [];
       for (let j = 0; j < tempGrid[i].length; j++) {
         //color each number of answerString
-        //first relevant number of answerString is colored purple
+        //first relevant number of answerString is colored green
         if (i == 0 && j == randomNumber1.toString().length + randomNumber2.toString().length && tempGrid[i][j]) {
           veryTempArray.push(
             <View style={view_style_combined}>
@@ -705,11 +705,8 @@ export default function DivisionQuizComponent({ navigation, route }) {
       <Modal animationType="fade" transparent={true} visible={modalIncorrectAnsVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>
-              {`
+            <Text style={[styles.modalText, {fontWeight: "bold", fontSize: 24}]}>
               Incorrect!
-              Random Number 1: ${randomNumber1}
-              Random Number 2: ${randomNumber2}`}
             </Text>
             <TouchableOpacity
               style={styles.try_again_button}
@@ -718,13 +715,13 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 setModalIncorrectAnsVisible(!modalIncorrectAnsVisible);
               }}
             >
-              <Text>Try Again</Text>
+              <Text style={[styles.button_text,{color: "#181818"}]}>Try Again</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
 
-      {/* modal that appears when the user gets 10 questions correct in a row */}
+      {/* modal that appears when the user gets 5 questions correct in a row */}
       <Modal animationType="fade" transparent={true} visible={modalQuizCompleteVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -823,12 +820,13 @@ const styles = StyleSheet.create({
   },
   try_again_button: {
     //a button that centers its children
-    width: 100,
+    width: 120,
     height: 50,
-    backgroundColor: "#d63349",
+    backgroundColor: "#F74141",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
+    marginTop: 25,
   },
   check_button: {
     width: 70,
@@ -868,14 +866,17 @@ const styles = StyleSheet.create({
   return_home_button: {
     width: 100,
     height: 50,
-    backgroundColor: "#62bf5c",
+    backgroundColor: "#168FFF",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
+    marginTop: 25,
   },
   return_home_button_text: {
-    color: "white",
-    fontSize: 16,
+    color: "#181818",
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   centeredView: {
     flex: 1,
