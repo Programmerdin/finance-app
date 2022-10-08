@@ -182,9 +182,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
   //function that displays the grid
   const displayGrid = () => {
     let finalTempArray = [];
-    let view_style_width = 12;
-    let view_style_height = 17;
-    let view_style_borderBottomColor = "black";
+    let view_style_width = 14;
+    let view_style_height = 22;
+    let view_style_borderBottomColor = "white";
     let view_style_borderBottomWidth = 1;
     let view_style_alignItems = "center";
     let view_style_jusifyContent = "center";
@@ -198,6 +198,8 @@ export default function DivisionQuizComponent({ navigation, route }) {
       justifyContent: view_style_jusifyContent,
     };
 
+    let font_size = 20
+
     let text_style_combined = { textAlign: "center" };
 
     for (let i = 0; i < tempGrid.length; i++) {
@@ -208,7 +210,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         if (i == 0 && j == randomNumber1.toString().length + randomNumber2.toString().length && tempGrid[i][j]) {
           veryTempArray.push(
             <View style={view_style_combined}>
-              <Text style={{ color: "#b30086", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#17CB49", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
           //second relevant number of answerString is colored blue
@@ -219,7 +221,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         ) {
           veryTempArray.push(
             <View style={view_style_combined}>
-              <Text style={{ color: "#2e2eb8", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#168FFF", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
           //third relevant number of answerString is colored orange
@@ -230,10 +232,10 @@ export default function DivisionQuizComponent({ navigation, route }) {
         ) {
           veryTempArray.push(
             <View style={view_style_combined}>
-              <Text style={{ color: "#e65c00", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#FF9F2D", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
-          //fourth relevant number of answerString is colored green
+          //fourth relevant number of answerString is colored purple
         } else if (
           i == 0 &&
           j == randomNumber1.toString().length + randomNumber2.toString().length + 3 &&
@@ -241,10 +243,10 @@ export default function DivisionQuizComponent({ navigation, route }) {
         ) {
           veryTempArray.push(
             <View style={view_style_combined}>
-              <Text style={{ color: "#00802b", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#BB86FC", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
-          //fifth relevant number of answerString is colored brown
+          //fifth relevant number of answerString is colored red
         } else if (
           i == 0 &&
           j == randomNumber1.toString().length + randomNumber2.toString().length + 4 &&
@@ -252,7 +254,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         ) {
           veryTempArray.push(
             <View style={view_style_combined}>
-              <Text style={{ color: "#990000", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#F74141", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
           //sixth relevant number of answerString is colored lime
@@ -263,7 +265,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         ) {
           veryTempArray.push(
             <View style={view_style_combined}>
-              <Text style={{ color: "#cccc00", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#cccc00", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
 
@@ -271,7 +273,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         } else if (i == 0 && j > randomNumber1.toString().length - 1) {
           veryTempArray.push(
             <View style={view_style_combined}>
-              <Text style={{ color: "#000000", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#ffffff", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
           //add a right border on the very right grid of randomNumber1
@@ -281,19 +283,19 @@ export default function DivisionQuizComponent({ navigation, route }) {
               style={{
                 width: view_style_width,
                 height: view_style_height,
-                borderRightColor: "black",
+                borderRightColor: "white",
                 borderRightWidth: 1,
                 alignItems: view_style_alignItems,
                 justifyContent: view_style_jusifyContent,
               }}
             >
-              <Text style={{ color: "#000000", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#ffffff", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
         } else if (i == 2 && j > 2 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
           veryTempArray.push(
             <View style={view_style_combined}>
-              <Text style={{ color: "#b30086", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#17CB49", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
         } else if (i == 4 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
@@ -308,7 +310,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 justifyContent: view_style_jusifyContent,
               }}
             >
-              <Text style={{ color: "#2e2eb8", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#168FFF", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
         } else if (i == 6 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
@@ -323,13 +325,13 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 justifyContent: view_style_jusifyContent,
               }}
             >
-              <Text style={{ color: "#e65c00", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#FF9F2D", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
         } else if (i == 8 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
           veryTempArray.push(
             <View style={view_style_combined}>
-              <Text style={{ color: "#00802b", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#BB86FC", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
         } else if (i == 10 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
@@ -344,7 +346,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 justifyContent: view_style_jusifyContent,
               }}
             >
-              <Text style={{ color: "#990000", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#F74141", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
         } else if (i == 12 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
@@ -359,7 +361,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 justifyContent: view_style_jusifyContent,
               }}
             >
-              <Text style={{ color: "#cccc00", textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#cccc00", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
         } else {
@@ -372,7 +374,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 justifyContent: view_style_jusifyContent,
               }}
             >
-              <Text style={{ textAlign: "center" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color:"white", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
         }
@@ -653,10 +655,11 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
       {/* display modal that contains a touchableOpacity that says next whenever Correct alert appears */}
       <Modal animationType="fade" transparent={true} visible={modalCorrectAnsVisible}>
+        <View style={styles.overlay}></View>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Correct!</Text>
-            <Text>{(Math.round((timeRecordArray.slice(-1) / 1000) * 10) / 10).toFixed(1)}s</Text>
+            <Text style={[styles.modalText, {fontWeight:"bold", fontSize:24}]}>Correct!</Text>
+            <Text style={styles.modalText}>{(Math.round((timeRecordArray.slice(-1) / 1000) * 10) / 10).toFixed(1)}s</Text>
 
             <View style={styles.modalGridContainer}>{tempArray}</View>
 
@@ -674,15 +677,8 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 setTimerOn(true);
               }}
             >
-              <Text style={styles.button_text}>Next</Text>
+              <Text style={[styles.button_text, {color: "#181818"}]}>Next</Text>
             </TouchableOpacity>
-            {/* round to first decimal place to always display the 1st decimal */}
-            <Text>
-              Time Record:{" "}
-              {timeRecordArray.map((record) => (
-                <Text>{(Math.round((record / 1000) * 10) / 10).toFixed(1)}s, </Text>
-              ))}
-            </Text>
           </View>
         </View>
       </Modal>
@@ -714,9 +710,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
       <Modal animationType="fade" transparent={true} visible={modalQuizCompleteVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Complete!</Text>
-            <Text>Time to complete: {timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000}s</Text>
-            <Text>
+            <Text style={[styles.modalText, {fontWeight:"bold", fontSize:24}]}>Complete!</Text>
+            <Text style={styles.modalText}>Time to complete: {timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000}s</Text>
+            <Text style={styles.modalText}>
               {" "}
               Time Record:{" "}
               {timeRecordArray.map((record) => (
@@ -740,11 +736,12 @@ export default function DivisionQuizComponent({ navigation, route }) {
         </View>
       </Modal>
 
-      <View style={styles.timer_view}>
+    {/* uncomment below to display timer for development purpose */}
+      {/* <View style={styles.timer_view}>
         <Text style={styles.basic_text}>Timer Component</Text>
         <Text style={styles.basic_text}>Time: {time}</Text>
         <Text style={styles.basic_text}>This section should be invisible</Text>
-      </View>
+      </View> */}
     </View>
   );
 }
@@ -772,8 +769,8 @@ const styles = StyleSheet.create({
   question_container: {
     justifyContent: "center",
     alignItems: "center",
-    borderColor: "red",
-    borderWidth: 1,
+    // borderColor: "red",
+    // borderWidth: 1,
     height: 400,
   },
   answer_field_container: {
@@ -787,10 +784,11 @@ const styles = StyleSheet.create({
     //a button that centers its children
     width: 100,
     height: 50,
-    backgroundColor: "#d24dff",
+    backgroundColor: "#BB86FC",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
+    margin: 10,
   },
   try_again_button: {
     //a button that centers its children
@@ -819,7 +817,8 @@ const styles = StyleSheet.create({
   },
   button_text: {
     color: "white",
-    fontSize: 16,
+    fontSize: 20,
+    fontWeight: "bold",
   },
   check_button_text: {
     color: "white",
@@ -855,7 +854,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "#222222",
+    backgroundColor: "#181818",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -867,14 +866,22 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    borderColor: "#444444",
+    borderWidth: 3,
+  },
+  modalText:{
+    color: "white",
   },
 
   //from here and below is for calculation steps
   modalGridContainer: {
-    borderColor: "red",
-    // width: 100,
-    // height: 100,
-    borderWidth: 1,
+    // borderColor: "red",
+    // borderWidth: 1,
+    paddingTop: 25,
+    paddingBottom: 25,
+    paddingRight: 25,
+    paddingLeft: 0,
+
   },
 
   //from here and below is for timer
@@ -897,5 +904,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
   },
+  
 
 });
