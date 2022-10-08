@@ -33,7 +33,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
   const [NumbersFromCalculationStepsArray, setNumbersFromCalculationsStepsArray] = useState([]);
   const [tempArray, setTempArray] = useState([]);
 
-  const [textInputBorderWidth, setTextInputBorderWidth] = useState(0);
+  const [textInputBorderColor, setTextInputBorderColor] = useState("#FFFFFF00");
 
   const [time, setTime] = useState(0);
   const [timerOn, setTimerOn] = useState(true); //default is true so that timer runs as soon as the quiz starts
@@ -41,6 +41,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
   const [latestQuizNumber, setLatestQuizNumber] = useState("0");
 
+  //number of questions to get right in a row to complete the quiz
+  let numberOfQuestionsToGetRightInARowToCompleteQuiz = 5;
+  
   let tempGrid = [];
 
   //set up a function that generates two random numbers for Division questions
@@ -198,7 +201,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
       justifyContent: view_style_jusifyContent,
     };
 
-    let font_size = 20
+    let font_size = 20;
 
     let text_style_combined = { textAlign: "center" };
 
@@ -374,7 +377,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 justifyContent: view_style_jusifyContent,
               }}
             >
-              <Text style={{ color:"white", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "white", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
             </View>
           );
         }
@@ -425,241 +428,256 @@ export default function DivisionQuizComponent({ navigation, route }) {
         {scoreArrayImage.slice(-10)}
       </View>
 
-      <View style={styles.question_container}>
-        <Text style={styles.randomNumber_text}>
-          {randomNumber2} / {randomNumber1} = ?
-        </Text>
+      {/* a TouchableOpacity titled quit */}
+      <View style={styles.home_button_container}>
+        <TouchableOpacity
+          style={styles.home_button}
+          onPress={() => {
+            //navigate to MainScreen
+            navigation.navigate("MainPage");
+          }}
+        >
+          <Image style={styles.home_icon} source={require("../assets/home_icon.png")} />
+        </TouchableOpacity>
       </View>
 
-      <View style={styles.answer_field_container}>
-      <TextInput
-          style={{
-            height: 60,
-            width: 130,
-            textAlign: "center",
-            borderRadius: 5,
-            color: "white",
-            margin: 10,
-            fontSize: 28,
-            borderWidth: textInputBorderWidth,
-            borderColor: "white",
-            //outline none gets rid of default styling of TextInput onFocus
-            outline: "none",
-            // outlineColor: "red",
-          }}
-          onChangeText={(text) => setUserInput(text)}
-          placeholder="....."
-          placeholderTextColor={"#525252"}
-          value={userInput}
-          keyboardType="number-pad"
-          onBlur={() => setTextInputBorderWidth(0)}
-          onFocus={() => setTextInputBorderWidth(3)}
-          //caretHidden hides blinking cursor
-          caretHidden={true}
-        />
-        {/* a TouchableOpacity titled check */}
-        <TouchableOpacity
-          style={styles.check_button}
-          onPress={() => {
-            //add 1 to the try count everytime the check button is pressed
-            //but try count is only updated on the next frame render so it will still be treated as 0 for the first run through of the code and only be updated to 1 next frame
-            setTryCount(TryCount + 1);
+      <View style={styles.quiz_container}>
+        <View style={styles.question_container}>
+          <Text style={styles.randomNumber_text}>
+            {randomNumber2} / {randomNumber1} = ?
+          </Text>
+        </View>
+        <View style={styles.answer_field_container}>
+          <TextInput
+            style={{
+              height: 60,
+              width: 150,
+              textAlign: "center",
+              borderRadius: 5,
+              color: "white",
+              margin: 10,
+              fontSize: 28,
+              borderWidth: 3,
+              borderBottomColor: "white",
+              borderBottomWidth: 3,
+              borderTopColor: textInputBorderColor,
+              borderTopWidth: 3,
+              borderLeftColor: textInputBorderColor,
+              borderLeftWidth: 3,
+              borderRightColor: textInputBorderColor,
+              borderRightWidth: 3,
+              //outline none gets rid of default styling of TextInput onFocus
+              outline: "none",
+              // outlineColor: "red",
+            }}
+            onChangeText={(text) => setUserInput(text)}
+            placeholder="....."
+            placeholderTextColor={"#525252"}
+            value={userInput}
+            keyboardType="number-pad"
+            onBlur={() => setTextInputBorderColor("#FFFFFF00")}
+            onFocus={() => setTextInputBorderColor("white")}
+            //caretHidden hides blinking cursor
+            caretHidden={true}
+          />
+          {/* a TouchableOpacity titled check */}
+          <TouchableOpacity
+            style={styles.check_button}
+            onPress={() => {
+              //convert userInput to string and then to array
+              let tempUserInputString = userInput.toString().split("");
 
-            //convert userInput to string and then to array
-            let tempUserInputString = userInput.toString().split("");
-
-            //clean up userInput to a uniform format
-            let cleanTempUserInputString = [];
-            setUserInputString(tempUserInputString);
-            //if first element is . followed by a number (meaning that the user skipped out on inputting the first 0)
-            //ex) .38 instead of 0.38
-            //then add a 0 to the beginning of the stringArray
-            if (tempUserInputString[0] == "." && tempUserInputString[1]) {
-              cleanTempUserInputString = ["0", ...tempUserInputString];
-            } else {
-              cleanTempUserInputString = tempUserInputString;
-            }
-
-            //run the grid function to put the calculation steps numbers into a grid
-            generateGrid();
-            //renders the tempgrid 2d array in a 2d manner
-            displayGrid();
-
-            //set up a variable for the purpose of if the correct answer has been entered or not
-            let did_correct_ans_happened = false;
-            //set up a variable for the purpose of checking if the first non-zero digit in the decimal answer happened or not
-            let did_relevant_digit_happened = false;
-            let relevant_digit_index = 0;
-            //adjust the below variable if you want the users to get more or less than 2 digits after relevant digit
-            let requried_correct_relevant_digit_count = 2;
-            let requried_correct_count_prior_to_relevant_digit = 0;
-            let requried_correct_relevant_digit_counter = requried_correct_relevant_digit_count;
-
-            //if tempUserInputString is empty then show alert that field is empty
-            if (cleanTempUserInputString.length == 0) {
-              alert("Field is empty");
-
-              //if userInputString is not empty (meaning user has entered something)
-            } else {
-              //set up a loop to go through the decimal answer and compare it to cleaned user input
-              for (let i = 0; i < 9; i++) {
-                //check if the current digit is a non-zero or non-"." digit
-                if (answerString[i] != 0 && answerString[i] != ".") {
-                  //if it is a non-zero or non-"." digit then set did_relevant_digit_happened to true
-                  did_relevant_digit_happened = true;
-                  relevant_digit_index = i;
-                  requried_correct_count_prior_to_relevant_digit = i;
-                  break;
-                }
+              //clean up userInput to a uniform format
+              let cleanTempUserInputString = [];
+              setUserInputString(tempUserInputString);
+              //if first element is . followed by a number (meaning that the user skipped out on inputting the first 0)
+              //ex) .38 instead of 0.38
+              //then add a 0 to the beginning of the stringArray
+              if (tempUserInputString[0] == "." && tempUserInputString[1]) {
+                cleanTempUserInputString = ["0", ...tempUserInputString];
+              } else {
+                cleanTempUserInputString = tempUserInputString;
               }
 
-              //check through digits previous to relevant digit and make sure they are correct
-              for (let i = 0; i < relevant_digit_index; i++) {
-                if (answerString[i] == cleanTempUserInputString[i]) {
-                  //the count will hit 0 if user enters correct answer digits before relevant digit
-                  requried_correct_count_prior_to_relevant_digit = requried_correct_count_prior_to_relevant_digit - 1;
-                }
-              }
+              //run the grid function to put the calculation steps numbers into a grid
+              generateGrid();
+              //renders the tempgrid 2d array in a 2d manner
+              displayGrid();
 
-              //check through digits after (and including) relevant digit and make sure they are correct
-              for (let i = 0; i < requried_correct_relevant_digit_count; i++) {
-                //check if the current digit after and including the relevant digit exist in the user input
-                if (cleanTempUserInputString[relevant_digit_index + i]) {
-                  //if it does exist then check if it is correct
-                  if (answerString[relevant_digit_index + i] == cleanTempUserInputString[relevant_digit_index + i]) {
-                    //if it is correct then decrease the counter by 1
-                    requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
+              //set up a variable for the purpose of if the correct answer has been entered or not
+              let did_correct_ans_happened = false;
+              //set up a variable for the purpose of checking if the first non-zero digit in the decimal answer happened or not
+              let did_relevant_digit_happened = false;
+              let relevant_digit_index = 0;
+              //adjust the below variable if you want the users to get more or less than 2 digits after relevant digit
+              let requried_correct_relevant_digit_count = 2;
+              let requried_correct_count_prior_to_relevant_digit = 0;
+              let requried_correct_relevant_digit_counter = requried_correct_relevant_digit_count;
+
+              //if tempUserInputString is empty then show alert that field is empty
+              if (cleanTempUserInputString.length == 0) {
+                alert("Field is empty");
+
+                //if userInputString is not empty (meaning user has entered something)
+              } else {
+                //add 1 to the try count everytime the check button is pressed
+                //but try count is only updated on the next frame render so it will still be treated as 0 for the first run through of the code and only be updated to 1 next frame
+                setTryCount(TryCount + 1);
+
+                //set up a loop to go through the decimal answer and compare it to cleaned user input
+                for (let i = 0; i < 9; i++) {
+                  //check if the current digit is a non-zero or non-"." digit
+                  if (answerString[i] != 0 && answerString[i] != ".") {
+                    //if it is a non-zero or non-"." digit then set did_relevant_digit_happened to true
+                    did_relevant_digit_happened = true;
+                    relevant_digit_index = i;
+                    requried_correct_count_prior_to_relevant_digit = i;
+                    break;
+                  }
+                }
+
+                //check through digits previous to relevant digit and make sure they are correct
+                for (let i = 0; i < relevant_digit_index; i++) {
+                  if (answerString[i] == cleanTempUserInputString[i]) {
+                    //the count will hit 0 if user enters correct answer digits before relevant digit
+                    requried_correct_count_prior_to_relevant_digit = requried_correct_count_prior_to_relevant_digit - 1;
+                  }
+                }
+
+                //check through digits after (and including) relevant digit and make sure they are correct
+                for (let i = 0; i < requried_correct_relevant_digit_count; i++) {
+                  //check if the current digit after and including the relevant digit exist in the user input
+                  if (cleanTempUserInputString[relevant_digit_index + i]) {
+                    //if it does exist then check if it is correct
+                    if (answerString[relevant_digit_index + i] == cleanTempUserInputString[relevant_digit_index + i]) {
+                      //if it is correct then decrease the counter by 1
+                      requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
+                    } else {
+                      //if userinput digit exists while the answerString digit does not exist (meaning the answer is a clean division)
+                      if (!answerString[relevant_digit_index + i]) {
+                        //decrease the counter by 1
+                        requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
+                      }
+                    }
+                    //if the current digit after the relevant digit does not exist in the user input
                   } else {
-                    //if userinput digit exists while the answerString digit does not exist (meaning the answer is a clean division)
-                    if (!answerString[relevant_digit_index + i]) {
-                      //decrease the counter by 1
+                    //check if the current digit after the relevant digit is 0 or answerStringDigit is non existent (meaning the answer is a clean division)
+                    if (answerString[relevant_digit_index + i] == 0 || !answerString[relevant_digit_index + i]) {
+                      //if it is 0 then decrease the counter by 1
                       requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
                     }
                   }
-                  //if the current digit after the relevant digit does not exist in the user input
+                }
+
+                //once required correct relevant digit count is 0 then set did_correct_ans_happened to true
+                if (
+                  requried_correct_relevant_digit_counter == 0 &&
+                  requried_correct_count_prior_to_relevant_digit == 0
+                ) {
+                  did_correct_ans_happened = true;
+                }
+                //if did_correct_ans_happened is true then show modal that the answer is correct
+                if (did_correct_ans_happened) {
+                  //reset the timer and push the current time to the time array and reset the timer
+                  setTimerOn(false);
+                  setTimeRecordArray([...timeRecordArray, time]);
+                  setTime(0);
+
+                  //check if the user has gotten 5 correct answers in the past 5 answers (meaning the user has gotten 5 correct answers in a row)
+                  let score_correct_in_a_row = 0;
+                  let reverse_last10_score_array = scoreArray.slice(-10).reverse();
+
+                  for (let i = 0; i < numberOfQuestionsToGetRightInARowToCompleteQuiz-1; i++) {
+                    if (reverse_last10_score_array[i] == "O") {
+                      score_correct_in_a_row = score_correct_in_a_row + 1;
+                    }
+                  }
+                  //make CorrectAnsModal visible if user has less than 5 Os in the scoreArray
+                  if (score_correct_in_a_row < numberOfQuestionsToGetRightInARowToCompleteQuiz-1) {
+                    //pause the timer and push the current time to the time array and reset the timer
+                    setTimerOn(false);
+                    setTimeRecordArray([...timeRecordArray, time]);
+                    setModalCorrectAnsVisible(true);
+                  } else {
+                    //if user has 5 or more Os in the scoreArray then make the CompleteQuizmodal visible
+                    setModalQuizCompleteVisible(true);
+                    //then set QuizComplete state to true
+                    setQuizComplete(true);
+
+                    //upload all the data
+                    //increase quiz number from the previous quiz number
+
+                    setLatestQuizNumber(latestQuizNumber + 1);
+                    console.log(latestQuizNumber);
+
+                    //get current date and time
+                    let date = new Date().toJSON();
+                    let time_took_to_complete = timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000;
+
+                    storeQuizData_All(latestQuizNumber + 1, 1, scoreArray.length, date, time_took_to_complete);
+                  }
+
+                  //check if tryCount is 1
+                  if (TryCount == 0) {
+                    //push O to scoreArray whenver the user gets the answer correct
+                    let tempScoreArray = [...scoreArray];
+                    tempScoreArray.push("O");
+                    setScoreArray(tempScoreArray);
+                    //push correct.png to scoreArrayImage whenver the user gets the answer correct
+                    let tempScoreArrayImage = [...scoreArrayImage];
+                    tempScoreArrayImage.push(
+                      <Image style={styles.score_image} source={require("../assets/correct.png")} />
+                    );
+                    setScoreArrayImage(tempScoreArrayImage);
+                  }
+                  //set tryCount to 0 once the user gets the answer correct regardless of how many tries it took
+                  setTryCount(0);
+
+                  //if the correct has not been entered then show the wrong answer modal
                 } else {
-                  //check if the current digit after the relevant digit is 0 or answerStringDigit is non existent (meaning the answer is a clean division)
-                  if (answerString[relevant_digit_index + i] == 0 || !answerString[relevant_digit_index + i]) {
-                    //if it is 0 then decrease the counter by 1
-                    requried_correct_relevant_digit_counter = requried_correct_relevant_digit_counter - 1;
+                  //If the user input is incorrect
+                  setTryCount(TryCount + 1);
+                  //make modal visible
+                  setModalIncorrectAnsVisible(true);
+                  //check if tryCount is 1
+                  //First Time Getting Wrong
+                  if (TryCount == 0) {
+                    //push X to scoreArray whenver the user gets the answer incorrect
+                    let tempScoreArray = [...scoreArray];
+                    tempScoreArray.push("X");
+                    setScoreArray(tempScoreArray);
+                    //push remove.png to scoreArrayImage whenver the user gets the answer incorrect
+                    let tempScoreArrayImage = [...scoreArrayImage];
+                    tempScoreArrayImage.push(
+                      <Image style={styles.score_image} source={require("../assets/remove.png")} />
+                    );
+                    setScoreArrayImage(tempScoreArrayImage);
                   }
                 }
               }
-
-              //once required correct relevant digit count is 0 then set did_correct_ans_happened to true
-              if (requried_correct_relevant_digit_counter == 0 && requried_correct_count_prior_to_relevant_digit == 0) {
-                did_correct_ans_happened = true;
-              }
-            }
-
-            //if did_correct_ans_happened is true then show modal that the answer is correct
-            if (did_correct_ans_happened) {
-              //reset the timer and push the current time to the time array and reset the timer
-              setTimerOn(false);
-              setTimeRecordArray([...timeRecordArray, time]);
-              setTime(0);
-
-              //check if the user has gotten 9 correct answers in the past 9 answers (meaning the user has gotten 9 correct answers in a row)
-              let score_correct_in_a_row = 0;
-              let reverse_last10_score_array = scoreArray.slice(-10).reverse();
-
-              for (let i = 0; i < 9; i++) {
-                if (reverse_last10_score_array[i] == "O") {
-                  score_correct_in_a_row = score_correct_in_a_row + 1;
-                }
-              }
-              //make CorrectAnsModal visible if user has less than 9 Os in the scoreArray
-              if (score_correct_in_a_row < 9) {
-                //pause the timer and push the current time to the time array and reset the timer
-                setTimerOn(false);
-                setTimeRecordArray([...timeRecordArray, time]);
-                setModalCorrectAnsVisible(true);
-              } else {
-                //if user has 9 or more Os in the scoreArray then make the CompleteQuizmodal visible
-                setModalQuizCompleteVisible(true);
-                //then set QuizComplete state to true
-                setQuizComplete(true);
-
-                //upload all the data
-                //increase quiz number from the previous quiz number
-
-                setLatestQuizNumber(latestQuizNumber + 1);
-                console.log(latestQuizNumber);
-
-                //get current date and time
-                let date = new Date().toJSON();
-                let time_took_to_complete = timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000;
-
-                storeQuizData_All(latestQuizNumber + 1, 1, scoreArray.length, date, time_took_to_complete);
-              }
-
-              //check if tryCount is 1
-              if (TryCount == 0) {
-                //push O to scoreArray whenver the user gets the answer correct
-                let tempScoreArray = [...scoreArray];
-                tempScoreArray.push("O");
-                setScoreArray(tempScoreArray);
-                //push correct.png to scoreArrayImage whenver the user gets the answer correct
-                let tempScoreArrayImage = [...scoreArrayImage];
-                tempScoreArrayImage.push(
-                  <Image style={styles.score_image} source={require("../assets/correct.png")} />
-                );
-                setScoreArrayImage(tempScoreArrayImage);
-              }
-              //set tryCount to 0 once the user gets the answer correct regardless of how many tries it took
-              setTryCount(0);
-
-              //if the correct has not been entered then show the wrong answer modal
-            } else {
-              //If the user input is incorrect
-              setTryCount(TryCount + 1);
-              //make modal visible
-              setModalIncorrectAnsVisible(true);
-              //check if tryCount is 1
-              //First Time Getting Wrong
-              if (TryCount == 0) {
-                //push X to scoreArray whenver the user gets the answer incorrect
-                let tempScoreArray = [...scoreArray];
-                tempScoreArray.push("X");
-                setScoreArray(tempScoreArray);
-                //push remove.png to scoreArrayImage whenver the user gets the answer incorrect
-                let tempScoreArrayImage = [...scoreArrayImage];
-                tempScoreArrayImage.push(<Image style={styles.score_image} source={require("../assets/remove.png")} />);
-                setScoreArrayImage(tempScoreArrayImage);
-              }
-            }
-          }}
-        >
-          <Text style={styles.check_button_text}>Check</Text>
-        </TouchableOpacity>
-
+            }}
+          >
+            <Text style={styles.check_button_text}>Check</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-
-      {/* a TouchableOpacity titled quit */}
-      <TouchableOpacity
-        style={styles.quit_button}
-        onPress={() => {
-          //navigate to MainScreen
-          navigation.navigate("MainPage");
-        }}
-      >
-        <Text style={styles.button_text}>X</Text>
-      </TouchableOpacity>
 
       {/* display answer */}
       <Text style={{ color: "white" }}>Answer: {answer.toFixed(6)}</Text>
       {/* display latest Quiz Number Retrieved */}
-      <Text style={{color: "white"}}>latestQuizNumber: {latestQuizNumber}</Text>
+      <Text style={{ color: "white" }}>latestQuizNumber: {latestQuizNumber}</Text>
       {/* display tryCount */}
-      <Text style={{ color: "white" }}>Try Count: {TryCount}</Text>
+      {/* <Text style={{ color: "white" }}>Try Count: {TryCount}</Text> */}
 
       {/* display modal that contains a touchableOpacity that says next whenever Correct alert appears */}
       <Modal animationType="fade" transparent={true} visible={modalCorrectAnsVisible}>
         <View style={styles.overlay}></View>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={[styles.modalText, {fontWeight:"bold", fontSize:24}]}>Correct!</Text>
-            <Text style={styles.modalText}>{(Math.round((timeRecordArray.slice(-1) / 1000) * 10) / 10).toFixed(1)}s</Text>
+            <Text style={[styles.modalText, { fontWeight: "bold", fontSize: 24 }]}>Correct!</Text>
+            <Text style={styles.modalText}>
+              {(Math.round((timeRecordArray.slice(-1) / 1000) * 10) / 10).toFixed(1)}s
+            </Text>
 
             <View style={styles.modalGridContainer}>{tempArray}</View>
 
@@ -677,7 +695,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 setTimerOn(true);
               }}
             >
-              <Text style={[styles.button_text, {color: "#181818"}]}>Next</Text>
+              <Text style={[styles.button_text, { color: "#181818" }]}>Next</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -710,8 +728,10 @@ export default function DivisionQuizComponent({ navigation, route }) {
       <Modal animationType="fade" transparent={true} visible={modalQuizCompleteVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={[styles.modalText, {fontWeight:"bold", fontSize:24}]}>Complete!</Text>
-            <Text style={styles.modalText}>Time to complete: {timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000}s</Text>
+            <Text style={[styles.modalText, { fontWeight: "bold", fontSize: 24 }]}>Complete!</Text>
+            <Text style={styles.modalText}>
+              Time to complete: {timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000}s
+            </Text>
             <Text style={styles.modalText}>
               {" "}
               Time Record:{" "}
@@ -736,7 +756,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         </View>
       </Modal>
 
-    {/* uncomment below to display timer for development purpose */}
+      {/* uncomment below to display timer for development purpose */}
       {/* <View style={styles.timer_view}>
         <Text style={styles.basic_text}>Timer Component</Text>
         <Text style={styles.basic_text}>Time: {time}</Text>
@@ -757,8 +777,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    borderColor: "blue",
-    borderWidth: 1,
+    // borderColor: "blue",
+    // borderWidth: 1,
     height: 40,
   },
   score_image: {
@@ -766,19 +786,30 @@ const styles = StyleSheet.create({
     height: 30,
     margin: 2,
   },
+  home_button_container: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  quiz_container: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   question_container: {
     justifyContent: "center",
     alignItems: "center",
     // borderColor: "red",
     // borderWidth: 1,
-    height: 400,
+    height: 100,
+    marginTop: "40%",
   },
   answer_field_container: {
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    borderColor: "green",
-    borderWidth: 1,
+    // borderColor: "green",
+    // borderWidth: 1,
+    padding: 10,
   },
   next_button: {
     //a button that centers its children
@@ -802,18 +833,18 @@ const styles = StyleSheet.create({
   check_button: {
     width: 70,
     height: 45,
-    backgroundColor: "#1aa3ff",
+    backgroundColor: "#168FFF",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
   },
-  quit_button: {
-    width: 30,
-    height: 30,
-    backgroundColor: "red",
+  home_button: {
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 10,
+  },
+  home_icon: {
+    width: 40,
+    height: 40,
   },
   button_text: {
     color: "white",
@@ -821,8 +852,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   check_button_text: {
-    color: "white",
-    fontSize: 16,
+    color: "#121212",
+    fontSize: 18,
     fontWeight: "bold",
   },
   score_text: {
@@ -869,7 +900,7 @@ const styles = StyleSheet.create({
     borderColor: "#444444",
     borderWidth: 3,
   },
-  modalText:{
+  modalText: {
     color: "white",
   },
 
@@ -881,7 +912,6 @@ const styles = StyleSheet.create({
     paddingBottom: 25,
     paddingRight: 25,
     paddingLeft: 0,
-
   },
 
   //from here and below is for timer
@@ -900,10 +930,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
   },
-  basic_text:{
+  basic_text: {
     color: "white",
     fontSize: 16,
   },
-  
-
 });
