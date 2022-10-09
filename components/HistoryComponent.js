@@ -11,6 +11,7 @@ import {
 import React from "react";
 import { useState, useEffect } from "react";
 import { TextInput } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function HistoryComponent({navigation, route}) {
   

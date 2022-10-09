@@ -72,7 +72,7 @@ export function storeQuizData_All(
   storeQuizTimeAndDate(quiz_time_n_date, quiz_number_stringified);
   storeQuizTimeTookToComplete(time_took_to_complete, quiz_number_stringified);
   storeLatestQuizNumber(quiz_number_stringified);
-  console.log("function ran")
+  console.log("function ran");
 }
 
 //retreieve latest quiz number that was saved
@@ -91,4 +91,26 @@ export const retrieveLatestQuizNumber = async () => {
     // error reading value
     console.log("Error reading last quiz number saved", e);
   }
+};
+
+//retreieve all the data from past quizes
+export const retrieveAllQuizData = async (Last_Quiz_Number_In_Number_Format) => {
+  try {
+    const quiz_number_array = [];
+    const quiz_type_array = [];
+    const quiz_total_questions_array = [];
+    const quiz_time_n_date_array = [];
+    const quiz_time_took_to_complete_array = [];
+
+    
+    //create all the necessary cells in the array so i can push the data into them without having to worry about async await
+    for (let i = 0; i < Last_Quiz_Number_In_Number_Format; i++) {
+      quiz_number_array.push("filler");
+      quiz_type_array.push("filler");
+      quiz_total_questions_array.push("filler");
+      quiz_time_n_date_array.push("filler");
+      quiz_time_took_to_complete_array.push("filler");
+    }
+
+  } catch (e) {}
 };
