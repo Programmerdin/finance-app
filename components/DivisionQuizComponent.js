@@ -725,16 +725,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
       <Modal animationType="fade" transparent={true} visible={modalQuizCompleteVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={[styles.modalText, { fontWeight: "bold", fontSize: 24 }]}>Complete!</Text>
-            <Text style={styles.modalText}>
+            <Text style={[styles.modalText, { fontWeight: "bold", fontSize: 24, margin: 10 }]}>Complete!</Text>
+            <Text style={{fontSize:20, color: "white"}}>
               Time to complete: {timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000}s
-            </Text>
-            <Text style={styles.modalText}>
-              {" "}
-              Time Record:{" "}
-              {timeRecordArray.map((record) => (
-                <Text>{(Math.round((record / 1000) * 10) / 10).toFixed(1)}s, </Text>
-              ))}
             </Text>
 
             {/* a button that closes modal and bring user to main page */}
@@ -865,7 +858,7 @@ const styles = StyleSheet.create({
   },
   return_home_button: {
     width: 100,
-    height: 50,
+    height: 70,
     backgroundColor: "#168FFF",
     justifyContent: "center",
     alignItems: "center",

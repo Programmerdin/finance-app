@@ -72,7 +72,7 @@ export function storeQuizData_All(
   storeQuizTimeAndDate(quiz_time_n_date, quiz_number_stringified);
   storeQuizTimeTookToComplete(time_took_to_complete, quiz_number_stringified);
   storeLatestQuizNumber(quiz_number_stringified);
-  console.log("function ran")
+  console.log("function ran");
 }
 
 //retreieve latest quiz number that was saved
@@ -97,15 +97,25 @@ export const retrieveLatestQuizNumber = async () => {
 export const retrievePastQuizData = async (quiz_number) => {
   let quiz_number_stringified = quiz_number.toString();
 
+  // let quiz_type = "filler"
+  // let quiz_total_questions = "filler"
+  // let quiz_time_and_date = "filler"
+  // let quiz_time_took_to_complete = "filler"
+
+  let quiz_data_object = {}
+
+
   //quiz type
   //1 = division quiz
   //2 = compounding quiz
   try {
     const quiz_type = await AsyncStorage.getItem(quiz_number_stringified + "_Quiz_Type");
     if (quiz_type !== null) {
+      //convert from string to number
+      // quiz_type = parseInt(quiz_type, 10);
       // value previously stored
       console.log("Quiz Type: ", quiz_type);
-      return quiz_type;
+      quiz_data_object.quiz_type = quiz_type
     }
   } catch (e) {
     // error reading value
@@ -116,9 +126,12 @@ export const retrievePastQuizData = async (quiz_number) => {
   try {
     const quiz_total_questions = await AsyncStorage.getItem(quiz_number_stringified + "_Quiz_Total_Questions");
     if (quiz_total_questions !== null) {
+      //convert from string to number
+      // quiz_total_questions = parseInt(quiz_total_questions, 10);
       // value previously stored
       console.log("Quiz Total Questions: ", quiz_total_questions);
-      return quiz_total_questions;
+      quiz_data_object.quiz_total_questions = quiz_total_questions
+
     }
   } catch (e) {
     // error reading value
@@ -129,9 +142,12 @@ export const retrievePastQuizData = async (quiz_number) => {
   try {
     const quiz_time_and_date = await AsyncStorage.getItem(quiz_number_stringified + "_Quiz_Time_And_Date");
     if (quiz_time_and_date !== null) {
+      //convert from string to number
+      // quiz_time_and_date = parseInt(quiz_time_and_date, 10);
       // value previously stored
       console.log("Quiz Time And Date: ", quiz_time_and_date);
-      return quiz_time_and_date;
+      quiz_data_object.quiz_time_and_date = quiz_time_and_date
+
     }
   } catch (e) {
     // error reading value
@@ -140,14 +156,21 @@ export const retrievePastQuizData = async (quiz_number) => {
 
   //quiz time took to complete
   try {
-    const quiz_time_took_to_complete = await AsyncStorage.getItem(quiz_number_stringified + "_Quiz_Time_Took_To_Complete");
+    const quiz_time_took_to_complete = await AsyncStorage.getItem(
+      quiz_number_stringified + "_Quiz_Time_Took_To_Complete"
+    );
     if (quiz_time_took_to_complete !== null) {
+      //convert from string to number
+      // quiz_time_took_to_complete = parseInt(quiz_time_took_to_complete, 10);
       // value previously stored
       console.log("Quiz Time Took To Complete: ", quiz_time_took_to_complete);
-      return quiz_time_took_to_complete;
+      quiz_data_object.quiz_time_took_to_complete = quiz_time_took_to_complete
     }
   } catch (e) {
     // error reading value
     console.log("Error reading quiz time took to complete", e);
   }
-}
+
+
+  return quiz_data_object
+};

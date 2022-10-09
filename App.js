@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import DivisionQuizScreen from './Screens/DivisionQuizScreen';
 import MainPageScreen from './Screens/MainPageScreen';
 import CompoundingQuizScreen from './Screens/CompoundingQuizScreen';
+import HistoryScreen from './Screens/HIstoryScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -19,6 +20,8 @@ const App =() => {
         <Stack.Screen name="MainPage" component={MainPageScreen} />
         <Stack.Screen name="DivisionQuiz" component={DivisionQuizScreen} />
         <Stack.Screen name="CompoundingQuiz" component={CompoundingQuizScreen} />
+        <Stack.Screen name="History" component={HistoryScreen} />
+
 
 
       </Stack.Navigator>
