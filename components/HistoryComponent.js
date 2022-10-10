@@ -16,26 +16,34 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function HistoryComponent({ navigation, route }) {
-  const [latestQuizNumber, setLatestQuizNumber] = useState("0");
-
-  const quiz_number_array = [];
-  const quiz_type_array = [];
-  const quiz_total_questions_array = [];
-  const quiz_time_n_date_array = [];
-  const quiz_time_took_to_complete_array = [];
+  const [quiz_type_array, set_quiz_type_array] = useState([]);
+  const [quiz_total_questions_array, set_quiz_total_questions_array] = useState([]);
+  const [quiz_time_and_date_array, set_quiz_time_and_date_array] = useState([]);
+  const [quiz_time_took_to_complete_array, set_quiz_time_took_to_complete_array] = useState([]);
 
   //functions to run as soon as the app loads up
   useEffect(() => {
     //retrieve latest quiz number from storage
     retrieveLatestQuizNumber().then(async (value) => {
-      //set the State from the retrieved value
-      //convert the retrieved value (it comes in string format) to a number format
-      setLatestQuizNumber(parseInt(value, 10));
+      let temp_quiz_type_array = [] 
+      let temp_quiz_total_questions_array = []
+      let temp_quiz_time_and_date_array = []
+      let temp_quiz_time_took_to_complete_array = []
 
+      //convert the retrieved value (it comes in string format) to a number format
       for (let i = 0; i < parseInt(value, 10); i++) {
-        const hi = await retrievePastQuizData(parseInt(value, 10));
-        console.log(hi);
+        const retrieved_data = await retrievePastQuizData(i+1);
+        console.log(retrieved_data);
+        temp_quiz_type_array.push(retrieved_data.quiz_type);
+        temp_quiz_total_questions_array.push(retrieved_data.quiz_total_questions);
+        temp_quiz_time_and_date_array.push(retrieved_data.quiz_time_and_date);
+        temp_quiz_time_took_to_complete_array.push(retrieved_data.quiz_time_took_to_complete);
       }
+
+      set_quiz_type_array(temp_quiz_type_array);
+      set_quiz_total_questions_array(temp_quiz_total_questions_array);
+      set_quiz_time_and_date_array(temp_quiz_time_and_date_array);
+      set_quiz_time_took_to_complete_array(temp_quiz_time_took_to_complete_array);
     });
   }, []);
 
@@ -43,6 +51,7 @@ export default function HistoryComponent({ navigation, route }) {
     <View style={styles.container}>
       <StatusBar style="auto" />
       <Text style={{ color: "white" }}>History Component</Text>
+      <Text style={{ color: "white" }}>{quiz_time_took_to_complete_array}</Text>
 
       {/* a TouchableOpacity titled quit */}
       <TouchableOpacity

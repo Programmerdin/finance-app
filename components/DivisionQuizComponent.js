@@ -663,9 +663,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
       </View>
 
       {/* display answer */}
-      <Text style={{ color: "white" }}>Answer: {answer.toFixed(6)}</Text>
+      {/* <Text style={{ color: "white" }}>Answer: {answer.toFixed(6)}</Text> */}
       {/* display latest Quiz Number Retrieved */}
-      <Text style={{ color: "white" }}>latestQuizNumber: {latestQuizNumber}</Text>
+      {/* <Text style={{ color: "white" }}>latestQuizNumber: {latestQuizNumber}</Text> */}
       {/* display tryCount */}
       {/* <Text style={{ color: "white" }}>Try Count: {TryCount}</Text> */}
 
@@ -791,7 +791,7 @@ const styles = StyleSheet.create({
     // borderColor: "red",
     // borderWidth: 1,
     height: 100,
-    marginTop: "40%",
+    marginTop: "45%",
   },
   answer_field_container: {
     justifyContent: "center",
