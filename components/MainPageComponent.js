@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 export default function MainPageComponent({ navigation, route }) {
   return (
     <View style={styles.the_View}>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
 
       {/* TouchableOpacity that navigates to DivisionQuizScreen */}
       <TouchableOpacity style={styles.navigation_button} onPress={() => navigation.navigate("DivisionQuiz")}>

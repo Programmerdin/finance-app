@@ -7,7 +7,6 @@ export default function DivisionQuizScreen({navigation}){
   
   return(
     <View style={styles.container}>
-      <StatusBar style="auto" />
       <DivisionQuizComponent navigation={navigation} />
     </View>
   )
@@ -15,7 +14,7 @@ export default function DivisionQuizScreen({navigation}){
 
 const styles = StyleSheet.create({
   container:{
-    flex:1
+    flex:1,
   },
   DivisionQuizComponent:{
     flex:1,

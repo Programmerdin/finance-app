@@ -7,7 +7,6 @@ export default function CompoundingQuizScreen({navigation}){
   
   return(
     <View style={styles.container}>
-      <StatusBar style="auto" />
       <CompoundingQuizComponent navigation={navigation} />
     </View>
   )

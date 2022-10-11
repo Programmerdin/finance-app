@@ -186,7 +186,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
   const displayGrid = () => {
     let finalTempArray = [];
     let view_style_width = 14;
-    let view_style_height = 22;
+    let view_style_height = 23;
     let view_style_borderBottomColor = "white";
     let view_style_borderBottomWidth = 1;
     let view_style_alignItems = "center";
@@ -224,7 +224,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         ) {
           veryTempArray.push(
             <View style={view_style_combined}>
-              <Text style={{ color: "#168FFF", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#168FFF", textAlign: "center", fontSize: font_size, borderWidth: 1, borderColor: "red" }}>{tempGrid[i][j]}</Text>
             </View>
           );
           //third relevant number of answerString is colored orange
@@ -422,7 +422,9 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" />
+      {/* a view to give space for statusBar */}
+      <View style={{paddingTop: 20}}></View>
+      <StatusBar style="light" />
       <View style={styles.score_container}>
         {/* display last 10 items of scoreArray */}
         {scoreArrayImage.slice(-10)}
@@ -662,12 +664,6 @@ export default function DivisionQuizComponent({ navigation, route }) {
         </View>
       </View>
 
-      {/* display answer */}
-      {/* <Text style={{ color: "white" }}>Answer: {answer.toFixed(6)}</Text> */}
-      {/* display latest Quiz Number Retrieved */}
-      {/* <Text style={{ color: "white" }}>latestQuizNumber: {latestQuizNumber}</Text> */}
-      {/* display tryCount */}
-      {/* <Text style={{ color: "white" }}>Try Count: {TryCount}</Text> */}
 
       {/* display modal that contains a touchableOpacity that says next whenever Correct alert appears */}
       <Modal animationType="fade" transparent={true} visible={modalCorrectAnsVisible}>
@@ -752,6 +748,14 @@ export default function DivisionQuizComponent({ navigation, route }) {
         <Text style={styles.basic_text}>Time: {time}</Text>
         <Text style={styles.basic_text}>This section should be invisible</Text>
       </View> */}
+
+      
+      {/* display answer */}
+      <Text style={{ color: "white" }}>Answer: {answer.toFixed(6)}</Text>
+      {/* display latest Quiz Number Retrieved */}
+      {/* <Text style={{ color: "white" }}>latestQuizNumber: {latestQuizNumber}</Text> */}
+      {/* display tryCount */}
+      {/* <Text style={{ color: "white" }}>Try Count: {TryCount}</Text> */}
     </View>
   );
 }
@@ -760,6 +764,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#121212",
+    
     // alignItems: "center",
     // justifyContent: "center",
   },
@@ -791,7 +796,7 @@ const styles = StyleSheet.create({
     // borderColor: "red",
     // borderWidth: 1,
     height: 100,
-    marginTop: "45%",
+    marginTop: "35%",
   },
   answer_field_container: {
     justifyContent: "center",
@@ -822,8 +827,9 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   check_button: {
-    width: 70,
-    height: 45,
+    width: 80,
+    height: 55,
+    margin: 10,
     backgroundColor: "#168FFF",
     justifyContent: "center",
     alignItems: "center",

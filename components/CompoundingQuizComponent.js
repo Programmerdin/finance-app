@@ -16,7 +16,7 @@ export default function CompoundingQuizComponent({navigation, route}) {
   
     return (
       <View>
-        <StatusBar style="auto" />
+        <StatusBar style="light" />
         <Text>Compounding Quiz Component</Text>
 
         {/* a TouchableOpacity titled quit */}

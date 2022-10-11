@@ -7,7 +7,6 @@ export default function MainPageScreen({navigation}){
 
   return(
     <View style={styles.the_View}>
-      <StatusBar style="auto" />
       <MainPageComponent navigation={navigation} />
     </View>
   )

@@ -8,7 +8,6 @@ export default function HistoryScreen({navigation}){
   
   return(
     <View style={styles.container}>
-      <StatusBar style="auto" />
       <HistoryComponent navigation={navigation}/>
     </View>
   )
