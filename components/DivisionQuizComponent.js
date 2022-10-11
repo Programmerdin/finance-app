@@ -186,7 +186,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
   const displayGrid = () => {
     let finalTempArray = [];
     let view_style_width = 14;
-    let view_style_height = 23;
+    let view_style_height = 26;
     let view_style_borderBottomColor = "white";
     let view_style_borderBottomWidth = 1;
     let view_style_alignItems = "center";
@@ -224,7 +224,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         ) {
           veryTempArray.push(
             <View style={view_style_combined}>
-              <Text style={{ color: "#168FFF", textAlign: "center", fontSize: font_size, borderWidth: 1, borderColor: "red" }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#168FFF", textAlign: "center", fontSize: font_size}}>{tempGrid[i][j]}</Text>
             </View>
           );
           //third relevant number of answerString is colored orange
@@ -298,7 +298,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         } else if (i == 2 && j > 2 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
           veryTempArray.push(
             <View style={view_style_combined}>
-              <Text style={{ color: "#17CB49", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#17CB49", textAlign: "center", fontSize: font_size, borderWidth: 1, borderColor: "red", marginTop: -6  }}>{tempGrid[i][j]}</Text>
             </View>
           );
         } else if (i == 4 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
@@ -328,7 +328,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 justifyContent: view_style_jusifyContent,
               }}
             >
-              <Text style={{ color: "#FF9F2D", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#FF9F2D", textAlign: "center", fontSize: font_size, borderWidth: 1, borderColor: "green"}}>{tempGrid[i][j]}</Text>
             </View>
           );
         } else if (i == 8 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
