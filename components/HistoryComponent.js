@@ -31,6 +31,8 @@ export default function HistoryComponent({ navigation, route }) {
 
   const [formatted_quiz_time_and_date_array, set_formatted_quiz_time_and_date_array] = useState([]);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   //functions to run as soon as the app loads up
   useEffect(() => {
     //retrieve latest quiz number from storage
@@ -40,14 +42,13 @@ export default function HistoryComponent({ navigation, route }) {
       let temp_quiz_time_and_date_array = [];
       let temp_quiz_time_took_to_complete_array = [];
 
-      //convert the retrieved value (it comes in string format) to a number format
+      //convert the retrieved value (it comes in string format) to a number format except for time and date
       for (let i = 0; i < parseInt(value, 10); i++) {
         const retrieved_data = await retrievePastQuizData(i + 1);
-        console.log(retrieved_data);
-        temp_quiz_type_array.push(retrieved_data.quiz_type);
-        temp_quiz_total_questions_array.push(retrieved_data.quiz_total_questions);
+        temp_quiz_type_array.push(parseFloat(retrieved_data.quiz_type, 10));
+        temp_quiz_total_questions_array.push(parseFloat(retrieved_data.quiz_total_questions, 10));
         temp_quiz_time_and_date_array.push(retrieved_data.quiz_time_and_date);
-        temp_quiz_time_took_to_complete_array.push(retrieved_data.quiz_time_took_to_complete);
+        temp_quiz_time_took_to_complete_array.push(parseFloat(retrieved_data.quiz_time_took_to_complete, 10));
       }
 
       set_quiz_type_array(temp_quiz_type_array);
@@ -61,9 +62,13 @@ export default function HistoryComponent({ navigation, route }) {
         temp_formatted_quiz_time_and_date_array.push(temp_quiz_time_and_date_array[i].slice(5, 7));
       }
       set_formatted_quiz_time_and_date_array(temp_formatted_quiz_time_and_date_array);
-      console.log(temp_formatted_quiz_time_and_date_array);
+      setIsLoading(false);
+      
     });
   }, []);
+
+  console.log("72 ", quiz_time_took_to_complete_array)
+  console.log("73 ", formatted_quiz_time_and_date_array)
 
   return (
     <View style={styles.container}>
@@ -80,12 +85,21 @@ export default function HistoryComponent({ navigation, route }) {
       </TouchableOpacity>
 
       <Text style={styles.chart_title}>Completion Time</Text>
-      <LineChart
+
+      {
+        (formatted_quiz_time_and_date_array.length >0 && quiz_time_took_to_complete_array.length >0) &&
+        <LineChart
         data={{
           labels: formatted_quiz_time_and_date_array,
+          // labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+          // labels: [],
+
           datasets: [
             {
               data: quiz_time_took_to_complete_array,
+              // data: [20, 45, 28, 80, 99, 43],
+              // data: [],
+
             },
           ],
           // legend: ["time to complete"] // optional
@@ -94,8 +108,8 @@ export default function HistoryComponent({ navigation, route }) {
         fromZero={true}
         yLabelsOffset={10}
         segments={10}
-        width={Dimensions.get("window").width} // from react-native
-        // width={340}
+        // width={Dimensions.get("window").width} // from react-native
+        width={340}
         height={500}
         // yAxisLabel="seconds "
         yAxisSuffix="s"
@@ -123,7 +137,7 @@ export default function HistoryComponent({ navigation, route }) {
           marginRight: 20,
           // borderRadius: 16,
         }}
-      />
+      />}
     </View>
   );
 }

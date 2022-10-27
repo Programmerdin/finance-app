@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "Mathy Quiz",
+    "slug": "mathyquiz",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/home_icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,14 +21,20 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.mathyquiz",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
-    
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "15bbda7a-8228-48f2-832d-912f465d914a"
+      }
     }
   }
 }

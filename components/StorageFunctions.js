@@ -72,7 +72,6 @@ export function storeQuizData_All(
   storeQuizTimeAndDate(quiz_time_n_date, quiz_number_stringified);
   storeQuizTimeTookToComplete(time_took_to_complete, quiz_number_stringified);
   storeLatestQuizNumber(quiz_number_stringified);
-  console.log("function ran");
 }
 
 //retreieve latest quiz number that was saved
@@ -81,7 +80,6 @@ export const retrieveLatestQuizNumber = async () => {
     const latest_quiz_number = await AsyncStorage.getItem("Last_Quiz_Number_Saved");
     if (latest_quiz_number !== null) {
       // value previously stored
-      console.log("Last Quiz Number Saved: ", latest_quiz_number);
       return latest_quiz_number;
       //return 0 if latest quiz number is null (meaning no quiz has been saved before)
     } else {
@@ -114,7 +112,6 @@ export const retrievePastQuizData = async (quiz_number) => {
       //convert from string to number
       // quiz_type = parseInt(quiz_type, 10);
       // value previously stored
-      console.log("Quiz Type: ", quiz_type);
       quiz_data_object.quiz_type = quiz_type
     }
   } catch (e) {
@@ -129,7 +126,6 @@ export const retrievePastQuizData = async (quiz_number) => {
       //convert from string to number
       // quiz_total_questions = parseInt(quiz_total_questions, 10);
       // value previously stored
-      console.log("Quiz Total Questions: ", quiz_total_questions);
       quiz_data_object.quiz_total_questions = quiz_total_questions
 
     }
@@ -145,7 +141,6 @@ export const retrievePastQuizData = async (quiz_number) => {
       //convert from string to number
       // quiz_time_and_date = parseInt(quiz_time_and_date, 10);
       // value previously stored
-      console.log("Quiz Time And Date: ", quiz_time_and_date);
       quiz_data_object.quiz_time_and_date = quiz_time_and_date
 
     }
@@ -163,7 +158,6 @@ export const retrievePastQuizData = async (quiz_number) => {
       //convert from string to number
       // quiz_time_took_to_complete = parseInt(quiz_time_took_to_complete, 10);
       // value previously stored
-      console.log("Quiz Time Took To Complete: ", quiz_time_took_to_complete);
       quiz_data_object.quiz_time_took_to_complete = quiz_time_took_to_complete
     }
   } catch (e) {

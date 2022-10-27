@@ -298,7 +298,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
         } else if (i == 2 && j > 2 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
           veryTempArray.push(
             <View style={view_style_combined}>
-              <Text style={{ color: "#17CB49", textAlign: "center", fontSize: font_size, borderWidth: 1, borderColor: "red", marginTop: -6  }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#17CB49", textAlign: "center", fontSize: font_size  }}>{tempGrid[i][j]}</Text>
             </View>
           );
         } else if (i == 4 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
@@ -328,7 +328,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 justifyContent: view_style_jusifyContent,
               }}
             >
-              <Text style={{ color: "#FF9F2D", textAlign: "center", fontSize: font_size, borderWidth: 1, borderColor: "green"}}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "#FF9F2D", textAlign: "center", fontSize: font_size}}>{tempGrid[i][j]}</Text>
             </View>
           );
         } else if (i == 8 && (tempGrid[i - 1][j] || tempGrid[i][j])) {
@@ -377,7 +377,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
                 justifyContent: view_style_jusifyContent,
               }}
             >
-              <Text style={{ color: "white", textAlign: "center", fontSize: font_size }}>{tempGrid[i][j]}</Text>
+              <Text style={{ color: "white", textAlign: "center", fontSize: font_size, }}>{tempGrid[i][j]}</Text>
             </View>
           );
         }
@@ -610,13 +610,22 @@ export default function DivisionQuizComponent({ navigation, route }) {
                     //increase quiz number from the previous quiz number
 
                     setLatestQuizNumber(latestQuizNumber + 1);
-                    console.log(latestQuizNumber);
+
 
                     //get current date and time
                     let date = new Date().toJSON();
-                    let time_took_to_complete = timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000;
+                    let time_took_temp = timeRecordArray.reduce((partialSum, a) => partialSum + a, 0) / 1000;
+                    let time_took_temp2 = time_took_temp + (time/1000)
+                    let time_took_to_complete = time_took_temp2.toFixed(1);
+                    
+                    //stringify the inputs
+                    let latestQuizNumber_temp = latestQuizNumber + 1
+                    let latestQuizNumber_string = latestQuizNumber_temp.toString();
+                    let scoreArrayLength_temp = scoreArray.length
+                    let scoreArrayLength_string = scoreArrayLength_temp.toString();
 
-                    storeQuizData_All(latestQuizNumber + 1, 1, scoreArray.length, date, time_took_to_complete);
+
+                    storeQuizData_All(latestQuizNumber_string, '1', scoreArrayLength_string, date, time_took_to_complete);
                   }
 
                   //check if tryCount is 1
@@ -751,7 +760,7 @@ export default function DivisionQuizComponent({ navigation, route }) {
 
       
       {/* display answer */}
-      <Text style={{ color: "white" }}>Answer: {answer.toFixed(6)}</Text>
+      {/* <Text style={{ color: "white" }}>Answer: {answer.toFixed(6)}</Text> */}
       {/* display latest Quiz Number Retrieved */}
       {/* <Text style={{ color: "white" }}>latestQuizNumber: {latestQuizNumber}</Text> */}
       {/* display tryCount */}

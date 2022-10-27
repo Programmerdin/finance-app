@@ -12,9 +12,9 @@ export default function MainPageComponent({ navigation, route }) {
       </TouchableOpacity>
 
       {/* TouchableOpacity that navigates to CompoundingQuizScreen */}
-      <TouchableOpacity style={styles.navigation_button} onPress={() => navigation.navigate("CompoundingQuiz")}>
+      {/* <TouchableOpacity style={styles.navigation_button} onPress={() => navigation.navigate("CompoundingQuiz")}>
         <Text style={styles.regular_text}>Compounding</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/* TouchableOpacity that navigates to HistoryScreen */}
       <TouchableOpacity style={styles.navigation_button} onPress={() => navigation.navigate("History")}>
